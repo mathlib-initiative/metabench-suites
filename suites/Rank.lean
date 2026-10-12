@@ -1,7 +1,7 @@
 /-
 Run from the root of this repository with:
 
-  METABENCH=<harness checkout> ./bench-run.sh <mathlib-checkout> suites/Rank/Rank.lean
+  METABENCH=<harness checkout> ./bench-run.sh <mathlib-checkout> suites/Rank.lean
 -/
 import Mathlib.Tactic.NormRank
 import MetaBench

@@ -2,7 +2,7 @@
 
 Benchmark suites for Mathlib tactics, run with [MetaBench](https://github.com/mathlib-initiative/MetaBench).
 
-Each suite is one file of `#benchmark` declarations, `suites/<Name>/<Name>.lean`.
+Each suite is one file of `#benchmark` declarations, `suites/<Name>.lean`.
 
 ## Running a suite
 
@@ -12,13 +12,13 @@ You need:
 * Both MetaBench and Mathlib using the same Lean toolchain.
 
 ```
-METABENCH=<metabench-checkout> ./bench-run.sh <mathlib-checkout> suites/Rank/Rank.lean
+METABENCH=<metabench-checkout> ./bench-run.sh <mathlib-checkout> suites/Rank.lean
 ```
 
 Arguments after the suite go to `lean`, this can be used to set `bench.*` options for example:
 
 ```
-METABENCH=<metabench-checkout> ./bench-run.sh <mathlib-checkout> suites/Rank/Rank.lean -Dbench.kernelUnfolds=5 -Dbench.proofHeads=5
+METABENCH=<metabench-checkout> ./bench-run.sh <mathlib-checkout> suites/Rank.lean -Dbench.kernelUnfolds=5 -Dbench.proofHeads=5
 ```
 
 The output format is described in the MetaBench README.
