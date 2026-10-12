@@ -1,0 +1,335 @@
+Mathlib:   paulcadman/mathlib4@master, commit 282fbb865d53622ef7f9ef29f6763a0327ee6b5f
+MetaBench: commit 4c255768980bea079300f1b28d3104992f5143b9
+Lean:      leanprover/lean4:v4.35.0-rc3
+Date:      2026-10-12 14:22 UTC
+
+eval_det/int/2:
+phase     kHB       min…max    ms     min…max
+goal    54.69   54.66…60.13  6.11   6.01…6.85
+proof   67.60   67.56…81.34  8.65  8.47…10.95
+kernel  57.91   57.40…57.91  8.01   7.75…8.48
+total  180.21 180.15…198.86 22.70 22.40…25.82
+proof term: 1430 nodes, kernel 5602 ns/node
+
+proof heads count
+HAdd.hAdd      35
+Eq.trans       26
+HMul.hMul      22
+Eq.refl        17
+Neg.neg        14
+
+kernel unfolds count
+Nat.rec           57
+OfNat.ofNat       52
+Add.add           46
+HAdd.hAdd         46
+Nat.casesOn       43
+
+eval_det/int/3:
+phase     kHB       min…max    ms     min…max
+goal    73.61   73.57…80.09  8.17   8.10…8.58
+proof  122.57 117.44…122.65 14.21 13.86…15.59
+kernel 133.79 133.13…133.79 17.03 16.86…17.12
+total  330.02 329.94…330.66 39.40 39.02…41.06
+proof term: 2983 nodes, kernel 5708 ns/node
+
+proof heads count
+HAdd.hAdd     118
+Eq.trans       82
+HMul.hMul      71
+Eq.refl        42
+congrArg       42
+
+kernel unfolds count
+Nat.rec          174
+Add.add          136
+HAdd.hAdd        136
+Nat.casesOn      134
+List.rec         102
+
+eval_det/int/4:
+phase     kHB       min…max    ms     min…max
+goal   115.97 115.83…123.29 11.90 11.72…12.90
+proof  279.87 215.21…279.92 28.53 27.48…30.77
+kernel 319.57 318.70…319.57 36.56 35.66…36.89
+total  715.39 657.20…715.50 77.33 75.03…79.41
+proof term: 7012 nodes, kernel 5214 ns/node
+
+proof heads count
+HAdd.hAdd     346
+Eq.trans      234
+HMul.hMul     206
+congrArg      118
+congr         106
+
+kernel unfolds count
+Nat.rec          413
+Add.add          388
+HAdd.hAdd        388
+Nat.casesOn      348
+List.rec         291
+
+eval_det/int/5:
+phase      kHB         min…max     ms       min…max
+goal    167.50   167.47…175.61  16.66   16.51…17.63
+proof   598.87   410.12…598.91  60.24   50.66…64.35
+kernel  678.67   677.53…678.67  78.41   75.51…81.82
+total  1445.02 1263.26…1445.21 153.21 146.41…162.69
+proof term: 15322 nodes, kernel 5118 ns/node
+
+proof heads count
+HAdd.hAdd     826
+Eq.trans      547
+HMul.hMul     491
+congr         273
+congrArg      271
+
+kernel unfolds count
+Add.add          888
+HAdd.hAdd        888
+Nat.rec          830
+Nat.casesOn      721
+List.rec         678
+
+eval_det/int/6:
+phase      kHB         min…max     ms       min…max
+goal    203.43   203.37…211.13  20.52   20.20…21.27
+proof  1196.04  770.73…1196.14 120.34  91.55…124.70
+kernel 1333.74 1332.34…1333.74 157.70 153.93…164.87
+total  2733.26 2314.20…2733.27 299.37 270.51…310.10
+proof term: 31021 nodes, kernel 5084 ns/node
+
+proof heads count
+HAdd.hAdd    1743
+Eq.trans     1145
+HMul.hMul    1026
+congr         616
+congrArg      544
+
+kernel unfolds count
+Add.add         1851
+HAdd.hAdd       1851
+Nat.rec         1577
+Nat.casesOn     1405
+List.rec        1371
+
+eval_det/int/cartan8:
+phase      kHB         min…max     ms       min…max
+goal    259.21   259.15…263.63  26.92   25.73…27.08
+proof  2322.42 1569.33…2322.59 217.84 171.74…226.84
+kernel 2637.50 2635.42…2637.50 299.81 286.85…308.09
+total  5219.10 4468.39…5219.29 542.87 485.52…562.01
+proof term: 41636 nodes, kernel 7201 ns/node
+
+proof heads count
+Eq.trans     2720
+HAdd.hAdd    2191
+HMul.hMul    1651
+congrArg     1600
+congr        1166
+
+kernel unfolds count
+List.rec        4227
+Add.add         3567
+HAdd.hAdd       3567
+Nat.rec         3336
+Nat.casesOn     2978
+
+eval_det/int/8:
+phase      kHB         min…max     ms       min…max
+goal    325.71   325.62…333.72  31.84   31.70…33.26
+proof  3849.05 2372.67…3849.58 384.07 277.50…395.00
+kernel 4043.47 4041.29…4043.47 536.53 524.18…547.17
+total  8218.22 6747.69…8218.76 949.59 834.95…975.00
+proof term: 98654 nodes, kernel 5438 ns/node
+
+proof heads count
+HAdd.hAdd    5981
+Eq.trans     3696
+HMul.hMul    3152
+congr        2150
+congrArg     1638
+
+kernel unfolds count
+Add.add         6127
+HAdd.hAdd       6127
+Nat.rec         4570
+Nat.casesOn     4228
+List.rec        4227
+
+eval_det/int/10:
+phase       kHB           min…max      ms         min…max
+goal     535.62     535.40…543.12   52.14     50.53…54.54
+proof   9478.75   5789.48…9479.39  936.05   665.08…959.60
+kernel  9719.04   9715.88…9719.04 1375.15 1342.12…1423.68
+total  19733.19 16048.48…19734.05 2328.69 2143.29…2412.44
+proof term: 243585 nodes, kernel 5645 ns/node
+
+proof heads count
+HAdd.hAdd   15148
+Eq.trans     9134
+HMul.hMul    7652
+congr        5456
+congrArg     3923
+
+kernel unfolds count
+Add.add        15368
+HAdd.hAdd      15368
+HMul.hMul      10817
+Mul.mul        10817
+Nat.rec        10750
+
+eval_det/int/12:
+phase       kHB           min…max      ms         min…max
+goal     708.83     708.80…715.95   70.90     69.24…75.20
+proof  19845.10 12129.15…19846.92 2104.67 1422.49…2289.79
+kernel 19633.34 19629.04…19633.34 3257.70 3063.32…3509.98
+total  40187.23 32474.13…40189.10 5308.01 4751.09…5774.04
+proof term: 496386 nodes, kernel 6563 ns/node
+
+proof heads count
+HAdd.hAdd   31365
+Eq.trans    19221
+HMul.hMul   15520
+congr       11567
+congrArg     8153
+
+kernel unfolds count
+Add.add        31927
+HAdd.hAdd      31927
+HMul.hMul      21220
+Mul.mul        21220
+Nat.rec        21210
+
+eval_det/rat/3:
+phase     kHB       min…max    ms     min…max
+goal    94.23   94.17…94.35 10.24  9.80…10.43
+proof  158.80 158.70…158.97 21.24 20.01…22.03
+kernel 145.29 145.29…145.29 19.75 19.66…20.31
+total  398.33 398.16…398.61 51.39 49.66…52.02
+proof term: 3189 nodes, kernel 6193 ns/node
+
+proof heads count
+HAdd.hAdd     104
+Eq.trans       81
+HMul.hMul      66
+Eq.refl        44
+congrArg       43
+
+kernel unfolds count
+Add.add          149
+HAdd.hAdd        149
+Nat.rec          146
+Nat.casesOn      108
+HMul.hMul        107
+
+eval_det/rat/4:
+phase     kHB       min…max    ms      min…max
+goal   171.19 171.13…171.29 16.57  16.38…16.83
+proof  287.67 287.58…287.74 37.33  36.23…38.86
+kernel 372.62 372.62…372.62 44.42  43.75…46.40
+total  831.46 831.39…831.57 98.00 97.05…101.64
+proof term: 8612 nodes, kernel 5158 ns/node
+
+proof heads count
+HAdd.hAdd     359
+Eq.trans      234
+HMul.hMul     210
+congrArg      119
+Eq.refl       116
+
+kernel unfolds count
+Nat.rec          428
+Add.add          411
+HAdd.hAdd        411
+Nat.casesOn      370
+HMul.hMul        361
+
+eval_det/sym/2:
+phase     kHB       min…max    ms     min…max
+goal    73.15   73.08…73.74  7.54   7.51…7.67
+proof  280.21 280.02…297.74 28.62 26.42…28.98
+kernel  76.82   76.77…76.82  9.98  9.75…10.32
+total  430.18 429.93…448.24 46.13 43.84…46.53
+proof term: 2109 nodes, kernel 4731 ns/node
+
+proof heads count
+HMul.hMul      60
+HAdd.hAdd      41
+Eq.trans       37
+congrArg       27
+Eq             26
+
+kernel unfolds  count
+Nat.rec            44
+Add.add            42
+HAdd.hAdd          42
+Ring.toSemiring    39
+HMul.hMul          31
+
+eval_det/sym/4:
+phase      kHB         min…max     ms       min…max
+goal    349.33   349.13…349.45  29.51   28.02…31.83
+proof  2624.76 2623.83…2637.31 214.56 212.27…223.37
+kernel  704.80   704.73…704.80  84.27   80.89…87.89
+total  3678.90 3677.83…3691.37 327.33 324.44…337.74
+proof term: 22040 nodes, kernel 3824 ns/node
+
+proof heads                              count
+HAdd.hAdd                                 1276
+HMul.hMul                                 1078
+Mathlib.Tactic.Ring.Common.add_pf_add_lt   626
+Eq.trans                                   393
+Mathlib.Tactic.Ring.Common.mul_pf_left     311
+
+kernel unfolds count
+Add.add          405
+HAdd.hAdd        405
+Nat.rec          315
+List.rec         291
+HMul.hMul        244
+
+eval_det/sym/5:
+phase       kHB           min…max      ms         min…max
+goal    1635.30   1631.07…1636.37  129.91   127.65…134.81
+proof  26204.49 26202.60…26216.91 1933.73 1918.91…1945.84
+kernel  4337.69   4337.62…4337.69  819.54   727.73…839.70
+total  32177.20 32175.74…32185.60 2892.18 2791.37…2912.23
+proof term: 170497 nodes, kernel 4807 ns/node
+
+proof heads                              count
+HAdd.hAdd                                16426
+Mathlib.Tactic.Ring.Common.add_pf_add_lt 13170
+HMul.hMul                                 5423
+Mathlib.Tactic.Ring.Common.mul_pf_left    2341
+Mathlib.Tactic.Ring.Common.mul_add        1635
+
+kernel unfolds count
+Add.add         1061
+HAdd.hAdd       1061
+HMul.hMul        760
+Mul.mul          760
+List.rec         678
+
+eval_det/sym/sylvester7:
+phase       kHB           min…max      ms         min…max
+goal    8493.87   8475.94…8506.64  795.42   771.49…872.48
+proof   5960.96   5959.60…5962.69  631.46   615.03…657.05
+kernel  4036.09   4035.99…4036.09  663.73   575.24…724.45
+total  18490.91 18474.61…18503.89 2075.79 1961.76…2253.98
+proof term: 108906 nodes, kernel 6094 ns/node
+
+proof heads                               count
+HAdd.hAdd                                  6244
+HMul.hMul                                  4377
+Eq.trans                                   2061
+Mathlib.Tactic.Ring.Common.mul_pf_left     1611
+Mathlib.Tactic.Ring.Common.add_overlap_pf  1445
+
+kernel unfolds count
+Add.add         3103
+HAdd.hAdd       3103
+List.rec        2502
+Nat.rec         2281
+Nat.casesOn     2106
+
