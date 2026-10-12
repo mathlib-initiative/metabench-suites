@@ -57,7 +57,7 @@ jobs:
       - name: Build the suite's Mathlib imports
         working-directory: mathlib
         run: |
-          modules=$(grep '^import Mathlib' "../suites/$SUITE/$SUITE.lean" | awk '{ print $2 }')
+          modules=$(grep '^import Mathlib' "../suites/$SUITE.lean" | awk '{ print $2 }')
           lake exe cache get $(echo "$modules" | sed 's|\.|/|g; s|$|.lean|')
           lake build $modules
 
@@ -73,7 +73,7 @@ jobs:
             echo "Lean:      $(cat mathlib/lean-toolchain)"
             echo "Date:      $(date -u '+%Y-%m-%d %H:%M UTC')"
             echo
-            METABENCH=metabench ./bench-run.sh mathlib "suites/$SUITE/$SUITE.lean" \
+            METABENCH=metabench ./bench-run.sh mathlib "suites/$SUITE.lean" \
               -Dbench.proofHeads=5 -Dbench.kernelUnfolds=5 \
               -Dbench.out="results/$SUITE.jsonl" -Dbench.tag="$tag"
           } | tee "results/$SUITE.txt"

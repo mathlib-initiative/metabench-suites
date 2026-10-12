@@ -1,7 +1,7 @@
 /-
 Run from the root of this repository with:
 
-  METABENCH=<harness checkout> ./bench-run.sh <mathlib-checkout> suites/Det/Det.lean
+  METABENCH=<harness checkout> ./bench-run.sh <mathlib-checkout> suites/Det.lean
 -/
 import Mathlib.Tactic.NormDet
 import MetaBench
