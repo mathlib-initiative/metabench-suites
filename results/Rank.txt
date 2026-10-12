@@ -1,0 +1,137 @@
+Mathlib:   leanprover-community/mathlib4@master, commit 1ce668c19c4f4d6810db48ede3b86734f7f52618
+MetaBench: commit 4c255768980bea079300f1b28d3104992f5143b9
+Lean:      leanprover/lean4:v4.35.0-rc4
+Date:      2026-10-12 14:16 UTC
+
+rank/full/6:
+phase     kHB       min…max    ms     min…max
+goal   188.89 188.87…195.04 12.34 12.22…13.00
+proof  150.67 150.67…179.53 11.54 10.80…13.39
+kernel 232.88 230.62…232.88 19.35 18.98…19.63
+total  572.44 572.41…605.19 43.25 42.41…45.77
+proof term: 3056 nodes, kernel 6331 ns/node
+
+proof heads                                                   count
+List.cons                                                       232
+HAdd.hAdd                                                       159
+Mathlib.Tactic.Matrix.ListMatrix.dotProduct_add_one_cons_cons   154
+HMul.hMul                                                       122
+Eq                                                               62
+
+kernel unfolds count
+Int.casesOn      586
+Int.rec          580
+List.rec         427
+Nat.rec          406
+Nat.casesOn      309
+
+rank/full/8:
+phase     kHB       min…max    ms     min…max
+goal   309.93 309.87…316.02 20.07 19.61…21.65
+proof  250.01 249.98…273.84 17.72 17.45…20.50
+kernel 409.31 405.76…409.31 34.46 32.99…34.81
+total  969.27 969.17…995.61 71.99 70.34…75.60
+proof term: 5247 nodes, kernel 6567 ns/node
+
+proof heads                                                   count
+List.cons                                                       399
+HAdd.hAdd                                                       349
+Mathlib.Tactic.Matrix.ListMatrix.dotProduct_add_one_cons_cons   342
+HMul.hMul                                                       254
+Eq                                                               94
+
+kernel unfolds  count
+Int.casesOn      1238
+Int.rec          1229
+Nat.rec           723
+List.rec          693
+Int.add.match_1   602
+
+rank/full/10:
+phase      kHB         min…max     ms       min…max
+goal    497.22   497.18…502.90  32.88   31.76…37.26
+proof   396.58   396.56…409.19  28.49   27.49…30.69
+kernel  668.43   663.17…668.43  55.42   53.61…58.10
+total  1562.28 1562.17…1575.26 117.09 113.98…121.95
+proof term: 8498 nodes, kernel 6521 ns/node
+
+proof heads                                                   count
+HAdd.hAdd                                                       645
+Mathlib.Tactic.Matrix.ListMatrix.dotProduct_add_one_cons_cons   636
+List.cons                                                       607
+HMul.hMul                                                       479
+Eq                                                              134
+
+kernel unfolds  count
+Int.casesOn      2313
+Int.rec          2298
+Nat.rec          1198
+Int.add.match_1  1123
+Add.add          1058
+
+rank/full/12:
+phase      kHB         min…max     ms       min…max
+goal    689.01   689.00…694.42  44.49   43.64…46.37
+proof   575.78   559.55…575.83  40.60   39.89…44.01
+kernel  986.42   979.21…986.42  84.43   81.64…85.98
+total  2251.22 2233.18…2251.48 170.70 166.55…172.94
+proof term: 12385 nodes, kernel 6817 ns/node
+
+proof heads                                                   count
+HAdd.hAdd                                                      1073
+Mathlib.Tactic.Matrix.ListMatrix.dotProduct_add_one_cons_cons  1062
+List.cons                                                       861
+HMul.hMul                                                       705
+Eq                                                              182
+
+kernel unfolds  count
+Int.casesOn      3634
+Int.rec          3616
+Int.add.match_1  1777
+Add.add          1744
+HAdd.hAdd        1744
+
+rank/deficient/10:
+phase      kHB         min…max     ms       min…max
+goal    511.27   511.13…520.77  32.41   32.19…35.05
+proof   394.48   386.25…394.51  27.98   27.64…29.77
+kernel  622.07   617.07…622.07  52.08   50.83…53.85
+total  1527.82 1524.09…1527.85 112.71 110.99…118.66
+proof term: 7902 nodes, kernel 6591 ns/node
+
+proof heads                                                   count
+HAdd.hAdd                                                       647
+Mathlib.Tactic.Matrix.ListMatrix.dotProduct_add_one_cons_cons   638
+List.cons                                                       557
+HMul.hMul                                                       382
+Eq                                                              124
+
+kernel unfolds count
+Int.casesOn     2103
+Int.rec         2089
+Nat.rec         1133
+Add.add         1030
+HAdd.hAdd       1030
+
+rank/deficient/12:
+phase      kHB         min…max     ms       min…max
+goal    717.57   717.52…729.42  45.56   45.07…47.77
+proof   577.40   538.04…577.59  40.48   39.87…40.97
+kernel  937.37   930.48…937.37  77.36   75.71…84.53
+total  2232.34 2197.94…2232.56 163.55 160.79…173.27
+proof term: 11882 nodes, kernel 6511 ns/node
+
+proof heads                                                   count
+HAdd.hAdd                                                      1075
+Mathlib.Tactic.Matrix.ListMatrix.dotProduct_add_one_cons_cons  1064
+List.cons                                                       787
+HMul.hMul                                                       620
+Eq                                                              168
+
+kernel unfolds  count
+Int.casesOn      3446
+Int.rec          3431
+Int.add.match_1  1687
+Nat.rec          1681
+Add.add          1677
+
