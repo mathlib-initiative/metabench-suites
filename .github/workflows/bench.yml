@@ -1,0 +1,89 @@
+# Runs a suite against a Mathlib ref and commits its output to results/
+# <Suite>.txt is what MetaBench printed to stdout and <Suite>.jsonl the raw records.
+name: bench
+run-name: ${{ inputs.suite }}, ${{ inputs.mathlib_repo }}@${{ inputs.mathlib_ref }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Suite to run
+        type: choice
+        options:
+          - Det
+          - Rank
+      mathlib_repo:
+        description: Mathlib repository, as owner/name
+        default: leanprover-community/mathlib4
+      mathlib_ref:
+        description: Branch, tag or sha in that repository
+        default: master
+
+env:
+  SUITE: ${{ inputs.suite }}
+  MATHLIB: ${{ inputs.mathlib_repo }}@${{ inputs.mathlib_ref }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency: bench-${{ inputs.suite }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: ${{ inputs.mathlib_repo }}
+          ref: ${{ inputs.mathlib_ref }}
+          path: mathlib
+          persist-credentials: false
+      - uses: actions/checkout@v5
+        with:
+          repository: mathlib-initiative/MetaBench
+          path: metabench
+          ssh-key: ${{ secrets.METABENCH_DEPLOY_KEY }}
+          persist-credentials: false
+
+      - name: Install Lean, and give MetaBench Mathlib's toolchain
+        run: |
+          curl -sSfL https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          cp mathlib/lean-toolchain metabench/lean-toolchain
+
+      - name: Build the suite's Mathlib imports
+        working-directory: mathlib
+        run: |
+          modules=$(grep '^import Mathlib' "../suites/$SUITE/$SUITE.lean" | awk '{ print $2 }')
+          lake exe cache get $(echo "$modules" | sed 's|\.|/|g; s|$|.lean|')
+          lake build $modules
+
+      - name: Run the suite
+        run: |
+          tag="$MATHLIB $(git -C mathlib rev-parse --short=10 HEAD)"
+          echo "TAG=$tag" >> "$GITHUB_ENV"
+          mkdir -p results
+          rm -f "results/$SUITE.jsonl"
+          {
+            echo "Mathlib:   $MATHLIB, commit $(git -C mathlib rev-parse HEAD)"
+            echo "MetaBench: commit $(git -C metabench rev-parse HEAD)"
+            echo "Lean:      $(cat mathlib/lean-toolchain)"
+            echo "Date:      $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo
+            METABENCH=metabench ./bench-run.sh mathlib "suites/$SUITE/$SUITE.lean" \
+              -Dbench.proofHeads=5 -Dbench.kernelUnfolds=5 \
+              -Dbench.out="results/$SUITE.jsonl" -Dbench.tag="$tag"
+          } | tee "results/$SUITE.txt"
+
+      - name: Commit the results
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR_ID+$GITHUB_ACTOR@users.noreply.github.com"
+          git add results
+          git commit -q -m "$SUITE: $TAG"
+          git pull -q --rebase origin "$GITHUB_REF_NAME"
+          git push -q origin "HEAD:$GITHUB_REF_NAME"
+          echo "[results/$SUITE.txt]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$(git rev-parse HEAD)/results/$SUITE.txt)" >> "$GITHUB_STEP_SUMMARY"
