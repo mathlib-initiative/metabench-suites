@@ -28,8 +28,9 @@ run_lean() {
     "$bench/.lake/build/lib/lean:$root/.lake/build" "$@"
 }
 
-mkdir -p "$root/.lake/build"
-for file in "$root"/shared/*.lean; do
-  run_lean -o "$root/.lake/build/$(basename "$file" .lean).olean" "$file"
+for file in $(cd "$root/shared" && find . -name '*.lean' | sort); do
+  out="$root/.lake/build/${file%.lean}.olean"
+  mkdir -p "$(dirname "$out")"
+  run_lean -o "$out" "$root/shared/$file"
 done
 run_lean -DElab.async=false "$suite" "$@"

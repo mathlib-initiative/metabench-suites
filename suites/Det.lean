@@ -6,8 +6,10 @@ Run from the root of this repository with:
 module
 
 import Mathlib.Tactic.NormDet
+import Matrix.Int
+import Matrix.Rat
+import Matrix.Symbolic
 import MetaBench
-import SharedMatrices
 
 #benchmark "eval_det/int/2" in example :
     (int_full_rank_2! : Matrix (Fin 2) (Fin 2) ℤ).det = -26 := by
