@@ -22,3 +22,9 @@ METABENCH=<metabench-checkout> ./bench-run.sh <mathlib-checkout> suites/Rank.lea
 ```
 
 The output format is described in the MetaBench README.
+
+## Shared modules
+
+Lean modules intended to be shared between benchmark suites should be placed in `shared/`. The
+`./bench-run.sh` script compiles these modules against mathlib before running the suite.
+
