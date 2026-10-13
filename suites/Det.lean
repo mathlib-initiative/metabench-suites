@@ -54,12 +54,12 @@ import SharedMatrices
   rfl
 
 #benchmark "eval_det/sym/2" in example (R : Type*) [CommRing R] (a b c d : R) :
-    (sym_generic_2!).det = a * d - b * c := by
+    (sym_generic_2! a b c d).det = a * d - b * c := by
   eval_det
   ring1
 
 #benchmark "eval_det/sym/4" in example (R : Type*) [CommRing R] (a b c d e f g h i j k l m n o p : R) :
-    (sym_generic_4! : Matrix (Fin 4) (Fin 4) R).det =
+    (sym_generic_4! a b c d e f g h i j k l m n o p : Matrix (Fin 4) (Fin 4) R).det =
       a * f * k * p - a * f * l * o - a * g * j * p + a * g * l * n + a * h *
         j * o - a * h * k * n - b * e * k * p + b * e * l * o + b * g * i * p
         - b * g * l * m - b * h * i * o + b * h * k * m + c * e * j * p - c *
@@ -70,7 +70,8 @@ import SharedMatrices
   ring1
 
 #benchmark "eval_det/sym/5" in example (R : Type*) [CommRing R] (x00 x01 x02 x03 x04 x10 x11 x12 x13 x14 x20 x21 x22 x23 x24 x30 x31 x32 x33 x34 x40 x41 x42 x43 x44 : R) :
-    (sym_generic_5! : Matrix (Fin 5) (Fin 5) R).det =
+    (sym_generic_5! x00 x01 x02 x03 x04 x10 x11 x12 x13 x14 x20 x21 x22 x23 x24
+        x30 x31 x32 x33 x34 x40 x41 x42 x43 x44 : Matrix (Fin 5) (Fin 5) R).det =
       x00 * x11 * x22 * x33 * x44 - x00 * x11 * x22 * x34 * x43 - x00 * x11 * x23 * x32 *
         x44 + x00 * x11 * x23 * x34 * x42 + x00 * x11 * x24 * x32 * x43 - x00 * x11 * x24
         * x33 * x42 - x00 * x12 * x21 * x33 * x44 + x00 * x12 * x21 * x34 * x43 + x00 *
@@ -120,7 +121,7 @@ import SharedMatrices
   ring1
 
 #benchmark "eval_det/sym/sylvester7" in example (R : Type*) [CommRing R] (a b c d e : R) :
-    (sym_sylvester_7! : Matrix (Fin 7) (Fin 7) R).det =
+    (sym_sylvester_7! a b c d e : Matrix (Fin 7) (Fin 7) R).det =
       a * (256 * a ^ 3 * e ^ 3 - 192 * a ^ 2 * b * d * e ^ 2
         - 128 * a ^ 2 * c ^ 2 * e ^ 2 + 144 * a ^ 2 * c * d ^ 2 * e
         - 27 * a ^ 2 * d ^ 4 + 144 * a * b ^ 2 * c * e ^ 2
