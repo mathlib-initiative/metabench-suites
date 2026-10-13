@@ -3,6 +3,8 @@ Run from the root of this repository with:
 
   METABENCH=<harness checkout> ./bench-run.sh <mathlib-checkout> suites/Rank.lean
 -/
+module
+
 import Mathlib.Tactic.NormRank
 import MetaBench
 import SharedMatrices
