@@ -1,4 +1,6 @@
-import Mathlib.LinearAlgebra.Matrix.Notation
+module
+
+public import Mathlib.LinearAlgebra.Matrix.Notation
 
 macro "int_full_rank_2!" : term => `(
   !![-8, -2;

@@ -3,6 +3,8 @@ Run from the root of this repository with:
 
   METABENCH=<harness checkout> ./bench-run.sh <mathlib-checkout> suites/Det.lean
 -/
+module
+
 import Mathlib.Tactic.NormDet
 import MetaBench
 import SharedMatrices
