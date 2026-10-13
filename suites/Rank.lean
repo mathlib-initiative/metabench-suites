@@ -11,6 +11,7 @@ import Mathlib.NumberTheory.Zsqrtd.GaussianInt
 import Mathlib.Tactic.Echelon.Zsqrtd
 import Mathlib.Tactic.NormNum.NatSqrt
 import Mathlib.Tactic.NormRank
+import Matrix.Adversarial
 import Matrix.Int
 import Matrix.Rat
 import Matrix.Real
@@ -132,4 +133,18 @@ instance : IsDomain (Zsqrtd 5) :=
 
 #benchmark "rank/zsqrtd_5/deficient/12" in example :
     (zsqrtd_5_rank6_12! : Matrix (Fin 12) (Fin 12) (Zsqrtd 5)).rank = 6 := by
+  eval_rank
+
+/-! ## Adversarial -/
+
+#benchmark "rank/adversarial/shift65535/12" in example :
+    (int_shift65535_12! : Matrix (Fin 12) (Fin 12) ℤ).rank = 12 := by
+  eval_rank
+
+#benchmark "rank/adversarial/shift65536/12" in example :
+    (int_shift65536_12! : Matrix (Fin 12) (Fin 12) ℤ).rank = 12 := by
+  eval_rank
+
+#benchmark "rank/adversarial/shift65537/12" in example :
+    (int_shift65537_12! : Matrix (Fin 12) (Fin 12) ℤ).rank = 12 := by
   eval_rank

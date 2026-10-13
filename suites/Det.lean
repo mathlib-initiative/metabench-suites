@@ -6,6 +6,7 @@ Run from the root of this repository with:
 module
 
 import Mathlib.Tactic.NormDet
+import Matrix.Adversarial
 import Matrix.Int
 import Matrix.Rat
 import Matrix.Symbolic
@@ -136,3 +137,20 @@ import MetaBench
         - 4 * b ^ 2 * c ^ 3 * e + b ^ 2 * c ^ 2 * d ^ 2) := by
   eval_det
   ring1
+
+/-! ## Adversarial -/
+
+#benchmark "eval_det/adversarial/shift65535/12" in example :
+    (int_shift65535_12! : Matrix (Fin 12) (Fin 12) ℤ).det =
+      6338199642593418381115880009840486149474684209079833984375 := by
+  eval_det
+
+#benchmark "eval_det/adversarial/shift65536/12" in example :
+    (int_shift65536_12! : Matrix (Fin 12) (Fin 12) ℤ).det =
+      6339359366734357498706597271185647726686866721302743351296 := by
+  eval_det
+
+#benchmark "eval_det/adversarial/shift65537/12" in example :
+    (int_shift65537_12! : Matrix (Fin 12) (Fin 12) ℤ).det =
+      6340519285388016364778478041217256152266905129714812846731 := by
+  eval_det
