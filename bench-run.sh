@@ -20,6 +20,16 @@ if ! diff -q "$bench/lean-toolchain" "$mathlib/lean-toolchain" >/dev/null; then
   exit 2
 fi
 (cd "$bench" && lake build MetaBench >/dev/null)
-exec lake +"$(cat "$mathlib/lean-toolchain")" --dir "$mathlib" env \
-  sh -c 'LEAN_PATH="$LEAN_PATH:$0" exec lean -DElab.async=false "$@"' \
-  "$bench/.lake/build/lib/lean" "$suite" "$@"
+
+root="$(cd "$(dirname "$0")" && pwd)"
+run_lean() {
+  lake +"$(cat "$mathlib/lean-toolchain")" --dir "$mathlib" env \
+    sh -c 'LEAN_PATH="$LEAN_PATH:$0" exec lean "$@"' \
+    "$bench/.lake/build/lib/lean:$root/.lake/build" "$@"
+}
+
+mkdir -p "$root/.lake/build"
+for file in "$root"/shared/*.lean; do
+  run_lean -o "$root/.lake/build/$(basename "$file" .lean).olean" "$file"
+done
+run_lean -DElab.async=false "$suite" "$@"
