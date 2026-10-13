@@ -1,0 +1,51 @@
+# Runs every suite once against Mathlib master, to check that they all still pass.
+name: check
+
+on:
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: leanprover-community/mathlib4
+          path: mathlib
+          persist-credentials: false
+      - uses: actions/checkout@v5
+        with:
+          repository: mathlib-initiative/MetaBench
+          path: metabench
+          ssh-key: ${{ secrets.METABENCH_DEPLOY_KEY }}
+          persist-credentials: false
+
+      - name: Install Lean, and give MetaBench Mathlib's toolchain
+        run: |
+          curl -sSfL https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          cp mathlib/lean-toolchain metabench/lean-toolchain
+
+      - name: Build the suites' Mathlib imports
+        working-directory: mathlib
+        run: |
+          modules=$(grep -h '^import Mathlib' ../suites/*.lean | awk '{ print $2 }' | sort -u)
+          lake exe cache get $(echo "$modules" | sed 's|\.|/|g; s|$|.lean|')
+          lake build $modules
+
+      - name: Run every suite once
+        run: |
+          failed=""
+          for suite in suites/*.lean; do
+            echo "::group::$suite"
+            METABENCH=metabench ./bench-run.sh mathlib "$suite" -Dbench.iters=1 || failed="$failed $suite"
+            echo "::endgroup::"
+          done
+          if [ -n "$failed" ]; then echo "::error::failed:$failed"; exit 1; fi
