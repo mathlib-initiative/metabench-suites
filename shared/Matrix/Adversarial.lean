@@ -8,17 +8,15 @@ public import Mathlib.LinearAlgebra.Matrix.Notation
 Matrices whose certificates degrade the kernel's expression caches, for benchmarking how a
 tactic's kernel check copes with hash collisions.
 
-The kernel hashes a natural number literal by its value mod `2^64`, since core's `Hashable Nat`
-is `UInt64.ofNat`. All multiples of `2^64` therefore share one hash. The kernel's caches look
-terms up by this hash, so terms that differ only in such literals fall into one bucket, and each
-lookup compares against every entry there. Checking a certificate full of them takes longer
-although the kernel performs the same reductions.
+The kernel uses mod `2^64` for hashing `Nat` literals (`Hashable Nat` is `UInt64.ofNat`). All
+multiples of `2^64` therefore share one hash, so terms that only differ by such literals fall
+into one bucket, causing performance degradation.
 
 `int_shift65536_12!` is `(i+1)(j+1) + 2^16 * [i = j]`. Each step of fraction-free elimination
 adds 16 factors of 2 to all its values, so from the fourth step on every value is a multiple of
 `2^64`. Bird's division-free determinant produces such values as well. `int_shift65535_12!` and
-`int_shift65537_12!` differ only in the shift. Their values have the same sizes, and none of them
-is a multiple of `2^64`.
+`int_shift65537_12!` differ only in the shift, and none of the intermediate values is a multiple
+of `2^64`.
 -/
 
 macro "int_shift65535_12!" : term => `(
