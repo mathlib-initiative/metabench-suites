@@ -28,3 +28,10 @@ The output format is described in the MetaBench README.
 Lean modules intended to be shared between benchmark suites should be placed in `shared/`. The
 `./bench-run.sh` script compiles these modules against mathlib before running the suite.
 
+
+## CI benchmark run
+
+The [bench.yml](.github/workflows/bench.yaml) workflow can be used to trigger CI runs of benchmarks
+against a specified mathlib repository and branch.
+
+The results of each CI benchmark run are committed to the [results/](results/) directory.
