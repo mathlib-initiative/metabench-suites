@@ -1,17 +1,14 @@
-# Runs a suite against a Mathlib ref and commits its output to results/
+# Runs some or all of the suites against a Mathlib ref and commits the output to results/
 # <Suite>.txt is what MetaBench printed to stdout and <Suite>.jsonl the raw records.
 name: bench
-run-name: ${{ inputs.suite }}, ${{ inputs.mathlib_repo }}@${{ inputs.mathlib_ref }}
+run-name: ${{ inputs.suite || 'all' }}, ${{ inputs.mathlib_repo }}@${{ inputs.mathlib_ref }}
 
 on:
   workflow_dispatch:
     inputs:
       suite:
-        description: Suite to run
-        type: choice
-        options:
-          - Det
-          - Rank
+        description: A comma-separated list of suites to run (e.g. Det,Rank). Set to empty to run all suites.
+        default: ''
       mathlib_repo:
         description: Mathlib repository, as owner/name
         default: leanprover-community/mathlib4
@@ -32,9 +29,19 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    concurrency: bench-${{ inputs.suite }}
+    concurrency: bench-${{ inputs.suite || 'all' }}
     steps:
       - uses: actions/checkout@v5
+
+      - name: Choose the suites
+        run: |
+          names=$(echo "$SUITE" | tr ',' ' ' | xargs)
+          if [ -z "$names" ]; then names=$(basename -s .lean suites/*.lean | xargs); fi
+          for name in $names; do
+            if [ ! -f "suites/$name.lean" ]; then echo "::error::No suite named '$name'"; exit 1; fi
+          done
+          echo "SUITES=$names" >> "$GITHUB_ENV"
+
       - uses: actions/checkout@v5
         with:
           repository: ${{ inputs.mathlib_repo }}
@@ -54,36 +61,44 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           cp mathlib/lean-toolchain metabench/lean-toolchain
 
-      - name: Build the suite's Mathlib imports
+      - name: Build the suites' Mathlib imports
         working-directory: mathlib
         run: |
-          modules=$(grep '^import Mathlib' "../suites/$SUITE.lean" | awk '{ print $2 }')
+          modules=$(for name in $SUITES; do grep '^import Mathlib' "../suites/$name.lean"; done | awk '{ print $2 }' | sort -u)
           lake exe cache get $(echo "$modules" | sed 's|\.|/|g; s|$|.lean|')
           lake build $modules
 
-      - name: Run the suite
+      - name: Run the suites
         run: |
           tag="$MATHLIB $(git -C mathlib rev-parse --short=10 HEAD)"
           echo "TAG=$tag" >> "$GITHUB_ENV"
           mkdir -p results
-          rm -f "results/$SUITE.jsonl"
-          {
-            echo "Mathlib:   $MATHLIB, commit $(git -C mathlib rev-parse HEAD)"
-            echo "MetaBench: commit $(git -C metabench rev-parse HEAD)"
-            echo "Lean:      $(cat mathlib/lean-toolchain)"
-            echo "Date:      $(date -u '+%Y-%m-%d %H:%M UTC')"
-            echo
-            METABENCH=metabench ./bench-run.sh mathlib "suites/$SUITE.lean" \
-              -Dbench.proofHeads=5 -Dbench.kernelUnfolds=5 \
-              -Dbench.out="results/$SUITE.jsonl" -Dbench.tag="$tag"
-          } | tee "results/$SUITE.txt"
+          for name in $SUITES; do
+            rm -f "results/$name.jsonl"
+            {
+              echo "Mathlib:   $MATHLIB, commit $(git -C mathlib rev-parse HEAD)"
+              echo "MetaBench: commit $(git -C metabench rev-parse HEAD)"
+              echo "Lean:      $(cat mathlib/lean-toolchain)"
+              echo "Date:      $(date -u '+%Y-%m-%d %H:%M UTC')"
+              echo
+              METABENCH=metabench ./bench-run.sh mathlib "suites/$name.lean" \
+                -Dbench.proofHeads=5 -Dbench.kernelUnfolds=5 \
+                -Dbench.out="results/$name.jsonl" -Dbench.tag="$tag"
+            } | tee "results/$name.txt"
+          done
 
       - name: Commit the results
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR_ID+$GITHUB_ACTOR@users.noreply.github.com"
-          git add results
-          git commit -q -m "$SUITE: $TAG"
+          # One commit per suite, as a single run would make, so `git log` can be queried per suite.
+          for name in $SUITES; do
+            git add "results/$name.txt" "results/$name.jsonl"
+            git commit -q -m "$name: $TAG"
+          done
           git pull -q --rebase origin "$GITHUB_REF_NAME"
           git push -q origin "HEAD:$GITHUB_REF_NAME"
-          echo "[results/$SUITE.txt]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$(git rev-parse HEAD)/results/$SUITE.txt)" >> "$GITHUB_STEP_SUMMARY"
+          sha=$(git rev-parse HEAD)
+          for name in $SUITES; do
+            echo "- [results/$name.txt]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$sha/results/$name.txt)" >> "$GITHUB_STEP_SUMMARY"
+          done
