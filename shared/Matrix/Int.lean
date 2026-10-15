@@ -79,6 +79,23 @@ macro "int_cartan_8!" : term => `(
       0,  0,  0,  0,  0, -1,  2, -1;
       0,  0,  0,  0,  0,  0, -1,  2])
 
+/-! Full rank. The first row is zero except in the last column, so elimination that pivots on the
+first nonzero entry swaps rows at each of the first 11 columns. -/
+
+macro "int_swaps11_12!" : term => `(
+  !![ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -4;
+     -3, -3,  5,  6, -9, -8, -9, -3,  7,  4,  3,  9;
+      3, -2,  6, -8, -2,  8, -4, -8, -1, -7,  2, -2;
+     -1,  3, -4, -9, -8, -9,  8,  5,  4, -4, -9,  5;
+      6, -8, -6, -7, -3,  8, -8,  5,  8, -3,  6, -9;
+      5,  8, -4,  9, -1, -2,  3, -5, -5, -6,  0, -8;
+     -8,  3,  7,  2, -2,  4,  5,  5, -9,  0, -3, -8;
+      9,  0, -5, -2,  6,  5,  7,  3, -1, -2,  9, -4;
+      4, -9,  4, -6,  3,  6,  8, -6, -3, -6,  3,  2;
+      2, -8, -8, -7,  9, -7, -9, -4,  9,  7, -4,  0;
+      2,  1, -6, -7, -5,  0,  9, -6,  9, -1,  0,  3;
+      1,  9,  6, -8, -2,  2,  1,  0, -2, -7, -5, -5])
+
 /-! Integer entries, rank-deficient, with the rank in the name. -/
 
 macro "int_rank3_6!" : term => `(
