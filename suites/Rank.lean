@@ -43,6 +43,10 @@ instance : IsDomain (Zsqrtd 5) :=
     (int_full_rank_12! : Matrix (Fin 12) (Fin 12) ℤ).rank = 12 := by
   eval_rank
 
+#benchmark "rank/swaps/12" in example :
+    (int_swaps11_12! : Matrix (Fin 12) (Fin 12) ℤ).rank = 12 := by
+  eval_rank
+
 #benchmark "rank/deficient/6" in example :
     (int_rank3_6! : Matrix (Fin 6) (Fin 6) ℤ).rank = 3 := by
   eval_rank
