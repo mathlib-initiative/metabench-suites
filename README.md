@@ -34,3 +34,10 @@ The [bench.yml](.github/workflows/bench.yml) workflow can be used to trigger CI 
 against a specified mathlib repository and branch.
 
 The results of each CI benchmark run are committed to the [results/](results/) directory.
+
+## Suites for code not yet on Mathlib master
+
+A suite that benchmarks an open Mathlib PR carries a line `-- MetaBench CI exclude: #<PR number>`.
+The [check.yml](.github/workflows/check.yml) workflow skips it, and a `bench.yml` run of all
+suites leaves it out. Run it by naming it in `bench.yml` with the PR's repository and branch, and
+remove the line once the PR is merged.
