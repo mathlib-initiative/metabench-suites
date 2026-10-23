@@ -36,7 +36,13 @@ jobs:
       - name: Choose the suites
         run: |
           names=$(echo "$SUITE" | tr ',' ' ' | xargs)
-          if [ -z "$names" ]; then names=$(basename -s .lean suites/*.lean | xargs); fi
+          # Running all suites leaves out those marked `-- MetaBench CI exclude: #<PR>`, which need that
+          # PR's code.
+          if [ -z "$names" ]; then
+            names=$(for suite in suites/*.lean; do
+              grep -q '^-- MetaBench CI exclude:' "$suite" || basename -s .lean "$suite"
+            done | xargs)
+          fi
           for name in $names; do
             if [ ! -f "suites/$name.lean" ]; then echo "::error::No suite named '$name'"; exit 1; fi
           done

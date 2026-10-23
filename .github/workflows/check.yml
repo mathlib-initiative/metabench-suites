@@ -1,4 +1,5 @@
-# Runs every suite once against Mathlib master, to check that they all still pass.
+# Runs every suite once against Mathlib master, to check that they all still pass. A suite marked
+# `-- MetaBench CI exclude: #<PR>` benchmarks code from an open Mathlib PR and is skipped.
 name: check
 
 on:
@@ -33,17 +34,31 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           cp mathlib/lean-toolchain metabench/lean-toolchain
 
+      - name: Choose the suites
+        run: |
+          suites=""
+          for suite in suites/*.lean; do
+            pr=$(sed -n 's/^-- MetaBench CI exclude: *//p' "$suite" | head -n 1)
+            if [ -n "$pr" ]; then
+              echo "::notice file=$suite::skipped, its code is in the open Mathlib PR $pr"
+            else
+              suites="$suites $suite"
+            fi
+          done
+          echo "SUITES=$suites" >> "$GITHUB_ENV"
+
       - name: Build the suites' Mathlib imports
+        if: env.SUITES != ''
         working-directory: mathlib
         run: |
-          modules=$(grep -h '^import Mathlib' ../suites/*.lean | awk '{ print $2 }' | sort -u)
+          modules=$(for suite in $SUITES; do grep '^import Mathlib' "../$suite"; done | awk '{ print $2 }' | sort -u)
           lake exe cache get $(echo "$modules" | sed 's|\.|/|g; s|$|.lean|')
           lake build $modules
 
       - name: Run every suite once
         run: |
           failed=""
-          for suite in suites/*.lean; do
+          for suite in $SUITES; do
             echo "::group::$suite"
             METABENCH=metabench ./bench-run.sh mathlib "$suite" -Dbench.iters=1 || failed="$failed $suite"
             echo "::endgroup::"
