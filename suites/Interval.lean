@@ -6,7 +6,7 @@ Run from the root of this repository with:
 -- MetaBench CI exclude: #45178
 module
 
-meta import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
+meta import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exponential
 import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Tactic
 import MetaBench
 
