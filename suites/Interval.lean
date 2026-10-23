@@ -7,7 +7,6 @@ Run from the root of this repository with:
 module
 
 meta import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
-import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
 import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Tactic
 import MetaBench
 
