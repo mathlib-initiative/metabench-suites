@@ -1,15 +1,15 @@
-Mathlib:   raoxiaojia/mathlib4@interval-exp-extension, commit 72f1eb9aa8ad0de56d90b0e95c7b1f2d27aa7bef
+Mathlib:   DavidLedvinka/mathlib4@inclusion-exp, commit 9c80a26d5b6a5b4ec14d6db0aba596463c6b281f
 MetaBench: commit 360e2ab5c54cec9f57bc94a33fb5f9534d956c3e
 Lean:      leanprover/lean4:v4.36.0-rc1
-Date:      2026-10-23 12:50 UTC
+Date:      2026-10-23 13:01 UTC
 
 exp/1/bits100:
 phase     kHB       min…max    ms     min…max
-goal     5.67     5.66…5.69  0.77   0.71…0.80
-proof   91.24   91.21…91.25  7.74   7.59…7.91
-kernel  57.61   57.61…57.61  7.29   7.23…8.08
-total  154.52 154.50…154.54 15.90 15.62…16.69
-proof term: 91 nodes, kernel 80130 ns/node
+goal     5.67     5.66…5.69  0.69   0.67…0.70
+proof   91.06   91.03…91.07  7.18   7.15…7.82
+kernel  40.16   40.16…40.16  5.19   5.18…7.36
+total  136.89 136.88…136.92 13.06 13.01…15.87
+proof term: 91 nodes, kernel 57002 ns/node
 
 proof heads            count
 OfNat.ofNat                2
@@ -19,19 +19,19 @@ Dyadic.instDecidableLT     1
 Dyadic.instLT              1
 
 kernel unfolds count
-Int.casesOn      270
-Int.rec          266
-Nat.rec          145
-Add.add          106
-HAdd.hAdd        106
+Nat.rec          143
+Bool.rec         121
+Add.add          116
+HAdd.hAdd        116
+Bool.casesOn      74
 
 exp/1/bits1000:
 phase     kHB       min…max    ms     min…max
-goal     6.47     6.46…6.48  0.99   0.96…1.00
-proof   86.73   86.64…86.79  8.57   8.51…8.69
-kernel 196.97 196.97…196.97 22.94 22.54…23.24
-total  290.16 290.09…290.23 32.42 32.20…32.77
-proof term: 91 nodes, kernel 252116 ns/node
+goal     6.47     6.46…6.48  1.02   0.83…1.08
+proof   86.13   86.04…86.19  8.58   6.88…9.32
+kernel  59.41   59.41…59.41 10.18  7.16…10.37
+total  152.00 151.93…152.07 19.97 14.87…20.77
+proof term: 91 nodes, kernel 111848 ns/node
 
 proof heads            count
 OfNat.ofNat                2
@@ -41,19 +41,19 @@ Dyadic.instDecidableLT     1
 Dyadic.instLT              1
 
 kernel unfolds count
-Int.casesOn      996
-Int.rec          992
-Nat.rec          736
-HMul.hMul        702
-Mul.mul          702
+Nat.rec          254
+Add.add          213
+HAdd.hAdd        213
+Bool.rec         141
+HMul.hMul        135
 
 exp/1/bits10000:
-phase      kHB         min…max     ms       min…max
-goal     14.60     14.59…14.62   2.87     2.84…3.02
-proof    93.41     93.37…93.48  19.07   19.00…19.21
-kernel 1632.28 1632.28…1632.28 221.23 219.42…228.12
-total  1740.28 1740.24…1740.36 243.24 241.33…250.09
-proof term: 91 nodes, kernel 2431078 ns/node
+phase     kHB       min…max    ms     min…max
+goal    14.60   14.59…14.62  2.48   2.46…2.49
+proof   86.84   86.80…86.91  7.77   7.74…7.91
+kernel 119.42 119.42…119.42 13.60 13.51…13.68
+total  220.85 220.81…220.93 23.90 23.73…24.05
+proof term: 91 nodes, kernel 149487 ns/node
 
 proof heads            count
 OfNat.ofNat                2
@@ -63,9 +63,9 @@ Dyadic.instDecidableLT     1
 Dyadic.instLT              1
 
 kernel unfolds count
-Int.casesOn     8488
-Int.rec         8484
-Nat.rec         6731
-HMul.hMul       6701
-Mul.mul         6701
+Nat.rec          607
+Add.add          548
+HAdd.hAdd        548
+HMul.hMul        403
+Mul.mul          403
 
