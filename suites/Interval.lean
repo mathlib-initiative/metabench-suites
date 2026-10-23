@@ -28,6 +28,6 @@ import MetaBench
     Real.exp 1 < Real.exp 1 + 1e-30103 := by
   dyadic_interval [prec := 100010]
 
--- #benchmark "exp/1/bits1000000" in example :
---     Real.exp 1 < Real.exp 1 + 1e-301030 := by
---   dyadic_interval [prec := 1000010]
+#benchmark "exp/1/bits1000000" in example :
+    Real.exp 1 < Real.exp 1 + 1e-301030 := by
+  dyadic_interval [prec := 1000010]
