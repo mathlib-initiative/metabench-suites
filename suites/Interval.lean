@@ -3,7 +3,6 @@ Run from the root of this repository with:
 
   METABENCH=<harness checkout> ./bench-run.sh <mathlib-checkout> suites/Interval.lean
 -/
--- MetaBench CI exclude: #45178
 module
 
 meta import Mathlib.Tactic.Inclusion.Extension.IntervalDyadicReal.Exp
