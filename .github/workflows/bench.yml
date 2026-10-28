@@ -67,14 +67,13 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           cp mathlib/lean-toolchain metabench/lean-toolchain
 
-      # `bench-run.sh` compiles every shared module with `lean`, so their imports are built too.
       - name: Build the suites' Mathlib imports
-        working-directory: mathlib
         run: |
-          modules=$(cd .. && cat $(printf 'suites/%s.lean ' $SUITES) $(find shared -name '*.lean') |
-            sed -nE 's/^(public )?(meta )?import (Mathlib[^ ]*).*/\3/p' | sort -u)
-          lake exe cache get $(echo "$modules" | sed 's|\.|/|g; s|$|.lean|')
-          lake build $modules
+          files=$(METABENCH=metabench ./imports.sh --in mathlib mathlib shared \
+            $(printf 'suites/%s.lean ' $SUITES))
+          cd mathlib
+          lake exe cache get $files
+          lake build $files
 
       - name: Run the suites
         run: |
