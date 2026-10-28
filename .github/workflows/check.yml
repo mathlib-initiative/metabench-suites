@@ -47,15 +47,13 @@ jobs:
           done
           echo "SUITES=$suites" >> "$GITHUB_ENV"
 
-      # `bench-run.sh` compiles every shared module with `lean`, so their imports are built too.
       - name: Build the suites' Mathlib imports
         if: env.SUITES != ''
-        working-directory: mathlib
         run: |
-          modules=$(cd .. && cat $SUITES $(find shared -name '*.lean') |
-            sed -nE 's/^(public )?(meta )?import (Mathlib[^ ]*).*/\3/p' | sort -u)
-          lake exe cache get $(echo "$modules" | sed 's|\.|/|g; s|$|.lean|')
-          lake build $modules
+          files=$(METABENCH=metabench ./imports.sh --in mathlib mathlib shared $SUITES)
+          cd mathlib
+          lake exe cache get $files
+          lake build $files
 
       - name: Run every suite once
         run: |

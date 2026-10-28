@@ -21,16 +21,20 @@ if ! diff -q "$bench/lean-toolchain" "$mathlib/lean-toolchain" >/dev/null; then
 fi
 (cd "$bench" && lake build MetaBench >/dev/null)
 
-root="$(cd "$(dirname "$0")" && pwd)"
+root="$(cd "$(dirname "$0")" && pwd -P)"
+# This repository's modules, like an entry of LEAN_SRC_PATH: `import Matrix.Int` is
+# shared/Matrix/Int.lean.
+local_modules="$root/shared"
 run_lean() {
   lake +"$(cat "$mathlib/lean-toolchain")" --dir "$mathlib" env \
     sh -c 'LEAN_PATH="$LEAN_PATH:$0" exec lean "$@"' \
     "$bench/.lake/build/lib/lean:$root/.lake/build" "$@"
 }
 
-for file in $(cd "$root/shared" && find . -name '*.lean' | sort); do
-  out="$root/.lake/build/${file%.lean}.olean"
+# Compile this repository's modules that the suite imports, directly or through each other.
+for module in $("$root/imports.sh" --in "$local_modules" "$mathlib" "$local_modules" "$suite"); do
+  out="$root/.lake/build/${module%.lean}.olean"
   mkdir -p "$(dirname "$out")"
-  run_lean -o "$out" "$root/shared/$file"
+  run_lean -o "$out" "$local_modules/$module"
 done
 run_lean -DElab.async=false "$suite" "$@"
