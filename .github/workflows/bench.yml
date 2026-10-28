@@ -58,7 +58,6 @@ jobs:
         with:
           repository: mathlib-initiative/MetaBench
           path: metabench
-          ssh-key: ${{ secrets.METABENCH_DEPLOY_KEY }}
           persist-credentials: false
 
       - name: Install Lean, and give MetaBench Mathlib's toolchain
