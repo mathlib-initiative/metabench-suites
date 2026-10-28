@@ -1,0 +1,17 @@
+# Run every suite against Mathlib master once per week.
+name: weekly
+
+on:
+  schedule:
+    - cron: '17 7 * * 1'
+      timezone: Europe/London
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - run: gh workflow run bench.yml --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}
