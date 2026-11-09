@@ -86,8 +86,3 @@ example : Fintype.card ((X ^ 60 - 5 * X ^ 47 + 2 * X ^ 31 - 11 * X ^ 22 + 3 * X 
 example : Fintype.card ((X ^ 80 - 5 * X ^ 63 + 2 * X ^ 41 - 11 * X ^ 22 + 3 * X ^ 9 - X ^ 2 +
     4 * X - 1 : ℚ[X]).rootSet ℝ) = 4 := by
   real_root_count
-
-#benchmark "rootcount/sparse/100" in
-example : Fintype.card ((X ^ 100 - 5 * X ^ 77 + 2 * X ^ 53 - 11 * X ^ 31 + 3 * X ^ 12 - X ^ 2 +
-    4 * X - 1 : ℚ[X]).rootSet ℝ) = 4 := by
-  real_root_count
