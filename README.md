@@ -35,6 +35,9 @@ against a specified mathlib repository and branch.
 
 The results of each CI benchmark run are committed to the [results/](results/) directory.
 
+> [!WARNING]
+> Wall-clock times of benchmarks between different runs are not comparable because of the variability of GitHub Action agents.
+
 ## Suites for code not yet on Mathlib master
 
 A suite that benchmarks an open Mathlib PR carries a line `-- MetaBench CI exclude: #<PR number>`.
