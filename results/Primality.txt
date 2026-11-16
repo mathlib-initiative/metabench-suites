@@ -1,15 +1,15 @@
-Mathlib:   leanprover-community/mathlib4@master, commit 9bac2d0692944a775113f7c130fd5e5b4608a854
+Mathlib:   leanprover-community/mathlib4@master, commit 90cfc2c59822ad9e158d892a6f8884e9fabf387a
 MetaBench: commit ff07a08153d928ad6fa19a723165cf657a0f4fa9
 Lean:      leanprover/lean4:v4.36.0-rc2
-Date:      2026-11-09 17:30 UTC
+Date:      2026-11-16 17:01 UTC
 
 primality/curve25519-p:
-phase      kHB         min…max     ms       min…max
-goal     33.74     33.71…33.75   3.50     3.47…3.63
-proof   356.86   356.80…356.88  37.49   37.10…39.14
-kernel  625.20   625.20…625.20  85.01   79.46…88.14
-total  1015.77 1015.74…1015.83 126.47 120.44…129.12
-proof term: 3348 nodes, kernel 25390 ns/node
+phase     kHB       min…max    ms     min…max
+goal    33.74   33.71…33.75  2.53   2.51…2.56
+proof  356.86 356.80…356.88 26.33 26.25…26.79
+kernel 540.98 540.98…540.98 50.91 49.93…53.96
+total  931.56 931.52…931.61 79.72 78.74…83.26
+proof term: 3348 nodes, kernel 15207 ns/node
 
 proof heads    count
 Membership.mem    89
@@ -19,19 +19,19 @@ Iff.mpr           88
 List.cons         88
 
 kernel unfolds   count
-HMod.hMod         3011
-Mod.mod           3011
-Bool.rec          1945
-Decidable.decide  1747
-Bool.casesOn      1725
+HMod.hMod         2487
+Mod.mod           2487
+Bool.rec          1705
+Decidable.decide  1496
+Nat.decEq         1408
 
 primality/p384-p:
 phase      kHB         min…max     ms       min…max
-goal    217.52   217.39…218.07  18.56   18.08…19.28
-proof   534.87   534.84…534.91  56.57   54.63…57.53
-kernel 1051.14 1051.14…1051.14 149.31 146.01…166.93
-total  1803.56 1803.38…1804.04 224.25 222.63…242.87
-proof term: 4563 nodes, kernel 32721 ns/node
+goal    217.52   217.39…218.07  12.32   12.24…12.45
+proof   534.86   534.83…534.91  38.66   38.34…39.49
+kernel  890.90   890.90…890.90  87.99   86.12…94.85
+total  1643.32 1643.14…1643.80 139.20 136.69…145.84
+proof term: 4563 nodes, kernel 19283 ns/node
 
 proof heads    count
 Membership.mem   133
@@ -41,19 +41,19 @@ Iff.mpr          132
 List.cons        132
 
 kernel unfolds   count
-HMod.hMod         5352
-Mod.mod           5352
-Bool.rec          3360
-Decidable.decide  3061
-Bool.casesOn      3028
+HMod.hMod         4334
+Mod.mod           4334
+Bool.rec          2885
+Decidable.decide  2556
+Nat.decEq         2423
 
 primality/m521:
 phase      kHB         min…max     ms       min…max
-goal     33.81     33.79…33.97   3.50     3.45…3.66
-proof   622.59   622.56…622.72  67.08   66.51…67.17
-kernel 1761.21 1761.21…1761.21 274.64 269.57…297.51
-total  2417.74 2417.56…2417.79 345.48 339.79…368.16
-proof term: 4940 nodes, kernel 55596 ns/node
+goal     33.81     33.79…33.97   2.59     2.56…2.64
+proof   622.60   622.56…622.72  45.74   45.32…46.85
+kernel 1649.83 1649.83…1649.83 191.01 188.93…192.39
+total  2306.36 2306.18…2306.41 239.38 237.31…240.95
+proof term: 4940 nodes, kernel 38666 ns/node
 
 proof heads    count
 Membership.mem   167
@@ -63,19 +63,19 @@ Iff.mpr          166
 List.cons        166
 
 kernel unfolds   count
-HMod.hMod         9778
-Mod.mod           9778
-Bool.rec          5760
-Decidable.decide  5379
-Bool.casesOn      5344
+HMod.hMod         9086
+Mod.mod           9086
+Bool.rec          5482
+Decidable.decide  5041
+Bool.casesOn      4893
 
 primality/factorial-154:
 phase      kHB         min…max     ms       min…max
-goal      2.79       2.79…2.79   0.75     0.71…0.80
-proof   224.90   224.87…224.98  35.30   35.06…37.07
-kernel 2577.18 2577.18…2577.18 507.67 499.89…538.21
-total  2804.86 2804.84…2804.94 545.49 535.70…574.06
-proof term: 2304 nodes, kernel 220342 ns/node
+goal      2.79       2.79…2.79   0.59     0.59…0.63
+proof   224.90   224.87…224.98  25.50   25.21…25.74
+kernel 2508.37 2508.37…2508.37 382.59 377.33…396.38
+total  2736.06 2736.03…2736.14 408.68 403.58…422.19
+proof term: 2304 nodes, kernel 166056 ns/node
 
 proof heads                         count
 Mathlib.Meta.NormNum.minFacHelper_3    86
@@ -85,19 +85,19 @@ Eq.refl                                46
 Nat.Prime                              39
 
 kernel unfolds   count
-HMod.hMod        16775
-Mod.mod          16775
-Bool.rec          8493
-Decidable.decide  8420
-Bool.casesOn      8419
+HMod.hMod        16323
+Mod.mod          16323
+Bool.rec          8300
+Decidable.decide  8228
+Nat.decEq         8192
 
 primality/gf-46-512:
 phase     kHB       min…max     ms       min…max
-goal    33.87   33.82…33.93   3.57     3.51…3.68
-proof   25.46   25.44…25.49  25.87   25.77…26.40
-kernel 649.10 649.10…649.10 206.87 204.54…214.37
-total  708.43 708.37…708.50 236.78 233.89…244.41
-proof term: 395 nodes, kernel 523728 ns/node
+goal    33.87   33.82…33.93   2.58     2.57…2.61
+proof   25.46   25.45…25.49  16.05   16.02…16.30
+kernel 437.42 437.42…437.42 109.83 108.16…111.64
+total  496.75 496.69…496.82 128.74 126.76…130.42
+proof term: 395 nodes, kernel 278047 ns/node
 
 proof heads                          count
 Eq.refl                                 13
@@ -107,19 +107,19 @@ OfNat.ofNat                              8
 instOfNatNat                             8
 
 kernel unfolds count
-HMod.hMod       4248
-Mod.mod         4248
-HMul.hMul       2146
-Mul.mul         2146
-Bool.rec        2136
+HMod.hMod       2832
+Mod.mod         2832
+HMul.hMul       1438
+Mul.mul         1438
+Bool.rec        1427
 
 primality/proth-5-5947:
-phase      kHB         min…max      ms         min…max
-goal     46.46     46.45…46.55    4.82       4.76…4.93
-proof    27.39     27.35…27.53  160.94   160.85…161.81
-kernel 1348.93 1348.93…1348.93  985.94   973.07…994.84
-total  1422.77 1422.73…1422.95 1152.57 1138.90…1160.61
-proof term: 447 nodes, kernel 2205693 ns/node
+phase     kHB       min…max     ms       min…max
+goal    46.46   46.45…46.55   3.39     3.35…3.47
+proof   27.39   27.36…27.53  94.86   94.53…97.61
+kernel 904.46 904.46…904.46 549.71 537.06…554.60
+total  978.31 978.27…978.49 648.11 635.88…652.94
+proof term: 447 nodes, kernel 1229772 ns/node
 
 proof heads                          count
 Eq.refl                                 13
@@ -129,9 +129,9 @@ OfNat.ofNat                              7
 instOfNatNat                             7
 
 kernel unfolds count
-HMod.hMod       8931
-Mod.mod         8931
-HMul.hMul       4494
-Mul.mul         4494
-Bool.rec        4478
+HMod.hMod       5955
+Mod.mod         5955
+HMul.hMul       3006
+Mul.mul         3006
+Bool.rec        2989
 
