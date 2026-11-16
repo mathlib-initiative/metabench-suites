@@ -1,15 +1,15 @@
-Mathlib:   leanprover-community/mathlib4@master, commit 9bac2d0692944a775113f7c130fd5e5b4608a854
+Mathlib:   leanprover-community/mathlib4@master, commit 90cfc2c59822ad9e158d892a6f8884e9fabf387a
 MetaBench: commit ff07a08153d928ad6fa19a723165cf657a0f4fa9
 Lean:      leanprover/lean4:v4.36.0-rc2
-Date:      2026-11-09 17:30 UTC
+Date:      2026-11-16 17:01 UTC
 
 exp/1/bits100:
 phase     kHB       min…max    ms     min…max
-goal     5.67     5.66…5.69  0.84   0.72…0.90
-proof   91.80   91.77…91.81  8.16   7.78…9.00
-kernel  57.61   57.61…57.61  7.50   7.28…7.62
-total  155.08 155.06…155.10 16.31 16.06…17.52
-proof term: 91 nodes, kernel 82376 ns/node
+goal     5.67     5.66…5.69  0.53   0.52…0.53
+proof   91.80   91.77…91.81  5.74   5.67…5.87
+kernel  57.69   57.69…57.69  5.48   5.44…5.54
+total  155.16 155.14…155.18 11.74 11.68…11.94
+proof term: 91 nodes, kernel 60231 ns/node
 
 proof heads            count
 OfNat.ofNat                2
@@ -27,11 +27,11 @@ HAdd.hAdd        106
 
 exp/1/bits1000:
 phase     kHB       min…max    ms     min…max
-goal     6.47     6.46…6.48  1.04   0.97…1.15
-proof   87.30   87.21…87.36  8.83   8.54…9.28
-kernel 196.97 196.97…196.97 24.41 23.33…25.76
-total  290.74 290.66…290.80 34.23 32.93…35.71
-proof term: 91 nodes, kernel 268203 ns/node
+goal     6.47     6.46…6.48  0.71   0.66…0.81
+proof   87.30   87.21…87.36  6.41   6.33…6.79
+kernel 197.05 197.05…197.05 16.79 16.34…18.92
+total  290.82 290.74…290.88 24.12 23.40…26.25
+proof term: 91 nodes, kernel 184459 ns/node
 
 proof heads            count
 OfNat.ofNat                2
@@ -49,11 +49,11 @@ Mul.mul          702
 
 exp/1/bits10000:
 phase      kHB         min…max     ms       min…max
-goal     14.60     14.59…14.62   3.12     3.07…3.23
-proof    93.98     93.94…94.05  18.91   18.70…19.04
-kernel 1632.28 1632.28…1632.28 223.11 218.20…243.09
-total  1740.85 1740.81…1740.93 245.09 240.07…265.36
-proof term: 91 nodes, kernel 2451704 ns/node
+goal     14.60     14.59…14.62   2.42     2.37…2.46
+proof    93.98     93.94…94.05  15.44   15.35…15.69
+kernel 1632.36 1632.36…1632.36 207.99 201.50…212.48
+total  1740.93 1740.89…1741.01 225.95 219.28…230.23
+proof term: 91 nodes, kernel 2285573 ns/node
 
 proof heads            count
 OfNat.ofNat                2
