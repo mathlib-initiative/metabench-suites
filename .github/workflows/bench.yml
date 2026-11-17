@@ -28,10 +28,12 @@ jobs:
   bench:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     concurrency: bench-${{ inputs.suite || 'all' }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          ssh-key: ${{ secrets.BENCH_DEPLOY_KEY }}
 
       - name: Choose the suites
         run: |
