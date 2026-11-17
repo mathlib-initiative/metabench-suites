@@ -1,15 +1,15 @@
-Mathlib:   leanprover-community/mathlib4@master, commit 90cfc2c59822ad9e158d892a6f8884e9fabf387a
+Mathlib:   leanprover-community/mathlib4@master, commit 7668accf6b4170dc7345265a505a1b7041b52146
 MetaBench: commit ff07a08153d928ad6fa19a723165cf657a0f4fa9
-Lean:      leanprover/lean4:v4.36.0-rc2
-Date:      2026-11-16 17:02 UTC
+Lean:      leanprover/lean4:v4.36.0
+Date:      2026-11-17 13:03 UTC
 
 rank/full/6:
 phase     kHB       min…max    ms     min…max
-goal   214.78 214.71…214.83 13.88 13.77…14.04
-proof  187.62 187.58…187.66 14.49 14.24…14.70
-kernel 234.88 234.88…234.88 19.48 19.40…19.72
-total  637.28 637.17…637.37 48.09 47.61…48.12
-proof term: 3163 nodes, kernel 6158 ns/node
+goal   214.78 214.71…214.83 15.80 15.54…16.05
+proof  187.62 187.58…187.66 17.03 16.56…17.34
+kernel 234.88 234.88…234.88 24.24 23.80…26.09
+total  637.28 637.17…637.37 57.10 56.34…59.16
+proof term: 3163 nodes, kernel 7664 ns/node
 
 proof heads                                                   count
 List.cons                                                       233
@@ -27,11 +27,11 @@ Nat.casesOn      315
 
 rank/full/8:
 phase      kHB         min…max    ms     min…max
-goal    339.15   339.07…339.22 21.73 21.53…22.23
-proof   282.68   282.61…282.73 21.19 21.03…21.46
-kernel  413.68   413.68…413.68 33.87 33.83…34.06
-total  1035.49 1035.45…1035.58 76.78 76.69…77.52
-proof term: 5386 nodes, kernel 6289 ns/node
+goal    339.15   339.07…339.22 24.90 24.64…25.12
+proof   282.68   282.61…282.73 25.46 25.10…25.58
+kernel  413.68   413.68…413.68 41.09 40.74…41.82
+total  1035.49 1035.45…1035.58 91.44 90.91…92.25
+proof term: 5386 nodes, kernel 7630 ns/node
 
 proof heads                                                   count
 List.cons                                                       397
@@ -49,11 +49,11 @@ Int.add.match_1   617
 
 rank/full/10:
 phase      kHB         min…max     ms       min…max
-goal    558.20   558.16…558.27  35.14   34.68…36.95
-proof   423.51   423.31…423.61  31.90   31.22…32.82
-kernel  653.49   653.49…653.49  54.58   54.42…61.81
-total  1635.25 1635.06…1635.29 123.43 120.39…130.45
-proof term: 8348 nodes, kernel 6538 ns/node
+goal    558.20   558.16…558.27  40.34   40.27…40.85
+proof   423.51   423.31…423.61  38.17   37.84…39.40
+kernel  653.49   653.49…653.49  65.48   64.36…66.74
+total  1635.25 1635.06…1635.29 143.69 143.47…146.65
+proof term: 8348 nodes, kernel 7843 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                       645
@@ -71,11 +71,11 @@ List.rec         1027
 
 rank/full/12:
 phase      kHB         min…max     ms       min…max
-goal    735.25   735.09…735.38  47.60   46.96…49.01
-proof   574.14   573.90…574.41  43.94   43.12…44.72
-kernel  986.43   986.43…986.43  92.15   85.31…95.10
-total  2295.70 2295.62…2296.22 184.87 176.13…185.19
-proof term: 12538 nodes, kernel 7350 ns/node
+goal    735.25   735.09…735.38  53.47   52.98…53.98
+proof   574.14   573.90…574.41  51.40   50.69…52.58
+kernel  986.43   986.43…986.43  99.46  98.94…101.24
+total  2295.70 2295.62…2296.22 203.83 203.46…207.80
+proof term: 12538 nodes, kernel 7932 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1073
@@ -93,11 +93,11 @@ Add.add          1711
 
 rank/swaps/12:
 phase      kHB         min…max     ms       min…max
-goal    740.28   740.19…740.47  48.03   46.80…50.45
-proof   571.62   571.46…571.72  45.12   43.58…47.59
-kernel 1042.34 1042.34…1042.34  94.32  93.37…118.52
-total  2354.23 2354.07…2354.49 186.84 184.97…216.56
-proof term: 12108 nodes, kernel 7790 ns/node
+goal    740.28   740.19…740.47  54.21   53.33…54.40
+proof   571.62   571.46…571.72  51.45   50.80…52.42
+kernel 1042.34 1042.34…1042.34 104.51 103.65…108.73
+total  2354.23 2354.07…2354.49 210.57 207.78…214.19
+proof term: 12108 nodes, kernel 8631 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1053
@@ -115,11 +115,11 @@ Int.add.match_1  1668
 
 rank/deficient/6:
 phase     kHB       min…max    ms     min…max
-goal   203.92 203.90…203.97 14.41 14.10…14.62
-proof  167.60 167.54…167.66 14.29 13.85…14.37
-kernel 216.81 216.81…216.81 20.36 19.71…20.89
-total  588.32 588.27…588.44 48.81 48.05…49.89
-proof term: 2897 nodes, kernel 7029 ns/node
+goal   203.92 203.90…203.97 15.90 15.60…16.44
+proof  167.60 167.54…167.66 16.05 15.71…16.58
+kernel 216.81 216.81…216.81 23.27 22.62…23.79
+total  588.32 588.27…588.44 55.23 54.22…56.47
+proof term: 2897 nodes, kernel 8034 ns/node
 
 proof heads                                                   count
 List.cons                                                       214
@@ -137,11 +137,11 @@ Nat.casesOn      280
 
 rank/deficient/10:
 phase      kHB         min…max     ms       min…max
-goal    537.18   537.10…537.23  34.99   34.56…35.31
-proof   390.45   390.38…390.54  30.69   29.67…32.53
-kernel  618.16   618.16…618.16  56.27   54.28…62.67
-total  1545.79 1545.74…1545.82 121.52 118.84…128.35
-proof term: 7957 nodes, kernel 7072 ns/node
+goal    537.18   537.10…537.23  40.37   39.92…41.10
+proof   390.45   390.38…390.54  36.14   35.56…37.43
+kernel  618.16   618.16…618.16  63.76   63.36…65.09
+total  1545.79 1545.74…1545.82 140.27 139.66…143.55
+proof term: 7957 nodes, kernel 8013 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                       647
@@ -159,11 +159,11 @@ HAdd.hAdd       1030
 
 rank/deficient/12:
 phase      kHB         min…max     ms       min…max
-goal    752.75   752.51…752.81  48.67   48.16…53.13
-proof   543.84   543.53…543.88  41.72   40.06…42.27
-kernel  931.46   931.46…931.46  82.97   78.24…84.75
-total  2227.99 2227.76…2228.07 173.54 168.25…178.49
-proof term: 11937 nodes, kernel 6951 ns/node
+goal    752.75   752.51…752.81  56.11   55.93…56.40
+proof   543.84   543.53…543.88  50.22   49.68…51.07
+kernel  931.46   931.46…931.46  94.00  93.01…100.35
+total  2227.99 2227.76…2228.07 200.77 199.46…206.59
+proof term: 11937 nodes, kernel 7874 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1075
@@ -181,11 +181,11 @@ Add.add          1677
 
 rank/rat/full/6:
 phase      kHB         min…max     ms       min…max
-goal    527.50   527.44…527.57  31.23   30.75…31.61
-proof   431.89   431.88…432.00  33.20   32.72…34.36
-kernel  541.57   541.57…541.57  52.88   52.34…53.54
-total  1501.00 1500.90…1501.09 117.24 116.74…118.98
-proof term: 3473 nodes, kernel 15226 ns/node
+goal    527.50   527.44…527.57  36.60   36.17…36.77
+proof   431.89   431.88…432.00  39.93   39.65…42.30
+kernel  541.57   541.57…541.57  62.95   62.10…64.22
+total  1501.00 1500.90…1501.09 139.62 138.20…142.95
+proof term: 3473 nodes, kernel 18127 ns/node
 
 proof heads                                                   count
 List.cons                                                       240
@@ -203,11 +203,11 @@ Div.div         1005
 
 rank/rat/full/12:
 phase      kHB         min…max     ms       min…max
-goal   1991.43 1991.02…1992.17 118.89 113.15…120.45
-proof  1454.91 1454.61…1454.95 105.13 103.99…110.31
-kernel 2757.98 2757.98…2757.98 344.42 332.21…365.17
-total  6204.35 6203.61…6205.06 567.88 558.25…590.19
-proof term: 13973 nodes, kernel 24649 ns/node
+goal   1991.43 1991.02…1992.17 137.06 135.79…137.94
+proof  1454.91 1454.61…1454.95 133.95 130.46…137.07
+kernel 2757.98 2757.98…2757.98 344.37 337.88…359.83
+total  6204.35 6203.61…6205.06 616.48 606.28…630.58
+proof term: 13973 nodes, kernel 24645 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1079
@@ -225,11 +225,11 @@ Div.div         5534
 
 rank/rat/deficient/6:
 phase      kHB         min…max     ms       min…max
-goal    526.89   526.89…526.97  31.99   31.03…32.32
-proof   409.60   409.58…409.66  31.81   31.62…32.08
-kernel  494.00   494.00…494.00  50.14   48.44…51.68
-total  1430.48 1430.46…1430.63 113.66 112.58…115.75
-proof term: 3187 nodes, kernel 15734 ns/node
+goal    526.89   526.89…526.97  37.37   36.68…37.89
+proof   409.60   409.58…409.66  38.91   38.41…38.96
+kernel  494.00   494.00…494.00  59.14   58.18…60.04
+total  1430.48 1430.46…1430.63 135.45 134.48…136.25
+proof term: 3187 nodes, kernel 18556 ns/node
 
 proof heads                                                   count
 List.cons                                                       221
@@ -247,11 +247,11 @@ Div.div          823
 
 rank/rat/deficient/12:
 phase      kHB         min…max     ms       min…max
-goal   2021.77 2020.95…2022.03 123.93 119.58…125.18
-proof  1427.06 1426.89…1427.23 104.30 102.21…106.43
-kernel 2369.14 2369.14…2369.14 296.74 294.59…321.64
-total  5817.98 5816.98…5818.40 525.72 519.69…551.04
-proof term: 12282 nodes, kernel 24161 ns/node
+goal   2021.77 2020.95…2022.03 140.36 138.69…142.14
+proof  1427.06 1426.89…1427.23 129.64 126.97…130.29
+kernel 2369.14 2369.14…2369.14 300.13 282.39…306.30
+total  5817.98 5816.98…5818.40 571.39 551.20…575.66
+proof term: 12282 nodes, kernel 24437 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1079
@@ -269,11 +269,11 @@ Int.add.match_1  4075
 
 rank/real/full/6:
 phase      kHB         min…max     ms       min…max
-goal    550.27   550.17…550.43  33.49   33.10…33.83
-proof  3260.87 3260.65…3261.14 201.02 196.24…208.20
-kernel  482.05   482.05…482.05  46.60   45.26…48.94
-total  4293.32 4292.86…4293.46 280.71 276.16…290.91
-proof term: 11381 nodes, kernel 4094 ns/node
+goal    550.27   550.17…550.43  38.71   38.46…39.71
+proof  3260.87 3260.65…3261.14 238.26 237.88…241.65
+kernel  482.05   482.05…482.05  52.32   51.27…54.65
+total  4293.32 4292.86…4293.46 331.67 327.79…335.65
+proof term: 11381 nodes, kernel 4597 ns/node
 
 proof heads count
 Eq.refl       350
@@ -291,11 +291,11 @@ Mul.mul          551
 
 rank/real/full/12:
 phase       kHB           min…max      ms         min…max
-goal    2013.73   2013.50…2014.30  121.08   118.02…125.75
-proof  21989.53 21986.34…21993.44 1284.92 1259.15…1303.31
-kernel  2470.84   2470.84…2470.84  258.19   239.80…267.01
-total  26474.04 26471.37…26478.01 1656.90 1635.36…1687.92
-proof term: 56301 nodes, kernel 4586 ns/node
+goal    2013.73   2013.50…2014.30  142.79   142.12…143.55
+proof  21989.53 21986.34…21993.44 1533.18 1524.92…1555.02
+kernel  2470.84   2470.84…2470.84  269.44   265.45…274.78
+total  26474.04 26471.37…26478.01 1947.27 1941.37…1962.60
+proof term: 56301 nodes, kernel 4786 ns/node
 
 proof heads                                                   count
 HMul.hMul                                                      1887
@@ -313,11 +313,11 @@ Nat.casesOn     3119
 
 rank/real/deficient/6:
 phase      kHB         min…max     ms       min…max
-goal    572.64   572.60…572.71  34.46   34.22…35.27
-proof  3127.45 3127.00…3127.53 188.11 184.84…189.82
-kernel  422.81   422.81…422.81  36.47   35.76…37.08
-total  4122.91 4122.44…4122.97 259.40 255.29…260.35
-proof term: 9769 nodes, kernel 3733 ns/node
+goal    572.64   572.60…572.71  41.94   41.08…42.21
+proof  3127.45 3127.00…3127.53 231.86 230.78…233.43
+kernel  422.81   422.81…422.81  45.32   44.78…50.44
+total  4122.91 4122.44…4122.97 319.12 316.93…325.07
+proof term: 9769 nodes, kernel 4639 ns/node
 
 proof heads                                                   count
 Eq.refl                                                         251
@@ -335,11 +335,11 @@ Int.rec          434
 
 rank/real/deficient/12:
 phase       kHB           min…max      ms         min…max
-goal    2169.93   2169.77…2171.04  130.89   129.99…131.89
-proof  21702.90 21700.78…21705.98 1241.54 1230.16…1252.21
-kernel  2060.14   2060.14…2060.14  200.47   194.40…208.72
-total  25933.43 25930.85…25936.00 1571.31 1559.81…1592.77
-proof term: 43567 nodes, kernel 4601 ns/node
+goal    2169.93   2169.77…2171.04  155.90   155.44…156.31
+proof  21702.90 21700.78…21705.98 1497.38 1482.96…1509.02
+kernel  2060.14   2060.14…2060.14  220.08   217.34…221.73
+total  25933.43 25930.85…25936.00 1874.55 1856.20…1884.89
+proof term: 43567 nodes, kernel 5051 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1251
@@ -357,11 +357,11 @@ HMul.hMul       2070
 
 rank/zmod7/full/6:
 phase     kHB       min…max    ms     min…max
-goal   179.29 179.20…179.36 13.23 12.72…13.82
-proof  418.84 418.53…419.10 28.18 27.55…29.45
-kernel 305.91 305.91…305.91 28.24 27.57…29.47
-total  904.02 903.77…904.29 69.68 69.21…70.99
-proof term: 3513 nodes, kernel 8040 ns/node
+goal   179.29 179.20…179.36 14.85 14.65…15.20
+proof  418.84 418.53…419.10 33.28 32.93…33.35
+kernel 305.91 305.91…305.91 32.73 31.61…33.84
+total  904.02 903.77…904.29 80.86 79.41…82.06
+proof term: 3513 nodes, kernel 9317 ns/node
 
 proof heads                                                   count
 List.cons                                                       229
@@ -379,11 +379,11 @@ Nat.casesOn      495
 
 rank/zmod7/full/12:
 phase      kHB         min…max     ms       min…max
-goal    439.72   439.59…439.80  31.36   31.28…32.08
-proof  1411.22 1410.52…1411.48  87.25   86.05…88.44
-kernel 1249.14 1249.14…1249.14 116.81 112.89…126.59
-total  3099.95 3099.44…3100.35 234.18 233.23…243.95
-proof term: 12868 nodes, kernel 9078 ns/node
+goal    439.72   439.59…439.80  34.54   34.15…34.80
+proof  1411.22 1410.52…1411.48 104.84 104.19…106.97
+kernel 1249.14 1249.14…1249.14 124.88 122.80…127.26
+total  3099.95 3099.44…3100.35 263.96 261.91…269.02
+proof term: 12868 nodes, kernel 9705 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1062
@@ -401,11 +401,11 @@ HAdd.hAdd       2475
 
 rank/zmod7/deficient/6:
 phase     kHB       min…max    ms     min…max
-goal   179.65 179.55…179.80 13.21 12.91…13.45
-proof  349.46 349.30…349.75 24.36 24.08…24.81
-kernel 267.72 267.72…267.72 24.38 23.96…25.22
-total  796.86 796.67…797.12 61.99 61.36…62.55
-proof term: 3051 nodes, kernel 7990 ns/node
+goal   179.65 179.55…179.80 14.85 14.53…15.14
+proof  349.46 349.30…349.75 27.93 27.80…28.66
+kernel 267.72 267.72…267.72 27.09 26.52…29.75
+total  796.86 796.67…797.12 70.24 69.09…72.34
+proof term: 3051 nodes, kernel 8879 ns/node
 
 proof heads                                                   count
 List.cons                                                       228
@@ -423,11 +423,11 @@ Nat.casesOn      448
 
 rank/zmod7/deficient/12:
 phase      kHB         min…max     ms       min…max
-goal    440.33   440.27…440.39  31.68   30.97…31.73
-proof  1305.11 1304.69…1305.53  80.35   79.58…80.61
-kernel 1197.91 1197.91…1197.91 100.87  98.58…109.22
-total  2943.35 2942.94…2943.72 212.95 210.08…221.31
-proof term: 12261 nodes, kernel 8227 ns/node
+goal    440.33   440.27…440.39  34.22   33.73…34.45
+proof  1305.11 1304.69…1305.53  98.51  96.60…101.42
+kernel 1197.91 1197.91…1197.91 117.14 113.57…118.80
+total  2943.35 2942.94…2943.72 250.34 246.02…253.17
+proof term: 12261 nodes, kernel 9554 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1061
@@ -444,12 +444,12 @@ Nat.rec         2497
 HAdd.hAdd       2456
 
 rank/zsqrtd_neg1/full/6:
-phase      kHB         min…max    ms     min…max
-goal    374.59   374.51…374.63 24.65 24.12…24.76
-proof   384.99   384.98…385.06 28.68 27.97…28.73
-kernel  444.60   444.60…444.60 39.06 38.43…40.76
-total  1204.17 1204.14…1204.24 92.15 90.73…94.10
-proof term: 3356 nodes, kernel 11639 ns/node
+phase      kHB         min…max     ms       min…max
+goal    374.59   374.51…374.63  28.24   27.74…28.36
+proof   384.99   384.98…385.06  34.76   33.84…37.02
+kernel  444.60   444.60…444.60  47.23   46.04…48.37
+total  1204.17 1204.14…1204.24 110.23 107.73…113.00
+proof term: 3356 nodes, kernel 14075 ns/node
 
 proof heads                                                   count
 List.cons                                                       234
@@ -467,11 +467,11 @@ HAdd.hAdd        1069
 
 rank/zsqrtd_neg1/full/12:
 phase      kHB         min…max     ms       min…max
-goal   1265.25 1265.08…1265.33  79.99   79.59…80.90
-proof  1045.26 1045.02…1045.61  77.27   76.92…79.27
-kernel 2357.71 2357.71…2357.71 242.91 237.00…247.96
-total  4668.22 4667.84…4668.59 399.98 394.21…408.13
-proof term: 14120 nodes, kernel 17203 ns/node
+goal   1265.25 1265.08…1265.33  93.79   92.26…95.47
+proof  1045.26 1045.02…1045.61  96.66   95.39…97.92
+kernel 2357.71 2357.71…2357.71 262.56 259.36…266.18
+total  4668.22 4667.84…4668.59 453.06 447.00…457.33
+proof term: 14120 nodes, kernel 18595 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1079
@@ -489,11 +489,11 @@ HAdd.hAdd        6937
 
 rank/zsqrtd_neg1/deficient/6:
 phase      kHB         min…max    ms     min…max
-goal    345.38   345.35…345.43 22.83 22.70…24.34
-proof   365.79   365.71…365.80 27.09 26.81…27.86
-kernel  368.58   368.58…368.58 33.13 32.79…36.16
-total  1079.73 1079.70…1079.78 83.97 82.56…86.71
-proof term: 2950 nodes, kernel 11230 ns/node
+goal    345.38   345.35…345.43 25.76 25.48…26.33
+proof   365.79   365.71…365.80 32.15 32.00…32.87
+kernel  368.58   368.58…368.58 38.75 37.66…39.31
+total  1079.73 1079.70…1079.78 96.70 95.43…97.74
+proof term: 2950 nodes, kernel 13137 ns/node
 
 proof heads                                                   count
 List.cons                                                       216
@@ -511,11 +511,11 @@ Int.add.match_1   904
 
 rank/zsqrtd_neg1/deficient/12:
 phase      kHB         min…max     ms       min…max
-goal   1297.44 1297.29…1297.53  83.27   82.09…84.36
-proof  1009.08 1008.98…1009.21  75.63   75.25…80.26
-kernel 1657.37 1657.37…1657.37 164.98 150.25…172.91
-total  3963.91 3963.64…3964.02 322.70 308.98…335.82
-proof term: 11669 nodes, kernel 14138 ns/node
+goal   1297.44 1297.29…1297.53  94.91   94.06…95.45
+proof  1009.08 1008.98…1009.21  91.98   91.64…92.79
+kernel 1657.37 1657.37…1657.37 174.63 170.18…177.42
+total  3963.91 3963.64…3964.02 361.86 358.32…363.19
+proof term: 11669 nodes, kernel 14966 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1077
@@ -532,12 +532,12 @@ HAdd.hAdd        5647
 Int.add.match_1  4755
 
 rank/zsqrtd_5/full/6:
-phase      kHB         min…max    ms     min…max
-goal    326.96   326.89…326.98 21.49 21.10…22.45
-proof   262.60   262.59…262.66 21.17 20.76…21.51
-kernel  468.92   468.92…468.92 43.00 41.79…47.04
-total  1058.47 1058.45…1058.54 86.62 83.71…90.04
-proof term: 3431 nodes, kernel 12532 ns/node
+phase      kHB         min…max     ms      min…max
+goal    326.96   326.89…326.98  24.57  23.94…25.53
+proof   262.60   262.59…262.66  25.43  25.20…25.86
+kernel  468.92   468.92…468.92  49.82  48.45…58.19
+total  1058.47 1058.45…1058.54 100.21 97.67…108.38
+proof term: 3431 nodes, kernel 14520 ns/node
 
 proof heads                                                   count
 List.cons                                                       235
@@ -555,11 +555,11 @@ HAdd.hAdd        1072
 
 rank/zsqrtd_5/full/12:
 phase      kHB         min…max     ms       min…max
-goal   1267.36 1267.14…1267.53  79.46   78.56…88.53
-proof   933.61   933.50…934.04  70.97   70.70…78.61
-kernel 2415.68 2415.68…2415.68 251.72 247.75…275.95
-total  4616.67 4616.63…4616.86 401.25 397.55…426.24
-proof term: 14092 nodes, kernel 17863 ns/node
+goal   1267.36 1267.14…1267.53  94.33   93.21…95.60
+proof   933.61   933.50…934.04  90.29   89.64…91.40
+kernel 2415.68 2415.68…2415.68 273.05 261.94…277.78
+total  4616.67 4616.63…4616.86 457.62 446.49…462.31
+proof term: 14092 nodes, kernel 19376 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1079
@@ -577,11 +577,11 @@ HAdd.hAdd        6952
 
 rank/zsqrtd_5/deficient/6:
 phase      kHB         min…max    ms     min…max
-goal    385.47   385.42…385.53 24.84 24.48…25.39
-proof   262.70   262.64…262.77 20.95 20.49…21.39
-kernel  404.93   404.93…404.93 35.93 35.10…36.59
-total  1053.12 1052.98…1053.19 81.85 80.58…83.37
-proof term: 3042 nodes, kernel 11813 ns/node
+goal    385.47   385.42…385.53 28.61 28.56…29.01
+proof   262.70   262.64…262.77 26.04 25.82…27.27
+kernel  404.93   404.93…404.93 42.28 41.43…43.76
+total  1053.12 1052.98…1053.19 97.25 96.17…99.62
+proof term: 3042 nodes, kernel 13900 ns/node
 
 proof heads                                                   count
 List.cons                                                       216
@@ -599,11 +599,11 @@ Int.add.match_1   989
 
 rank/zsqrtd_5/deficient/12:
 phase      kHB         min…max     ms       min…max
-goal   1274.01 1273.83…1274.41  80.57   80.09…81.11
-proof   896.40   896.16…896.46  68.29   67.67…70.99
-kernel 1778.12 1778.12…1778.12 176.38 169.44…185.69
-total  3948.48 3948.28…3948.99 324.65 317.98…337.79
-proof term: 11936 nodes, kernel 14777 ns/node
+goal   1274.01 1273.83…1274.41  95.70   94.85…96.82
+proof   896.40   896.16…896.46  87.37   86.71…87.61
+kernel 1778.12 1778.12…1778.12 194.92 194.39…207.82
+total  3948.48 3948.28…3948.99 378.02 376.05…392.02
+proof term: 11936 nodes, kernel 16330 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1079
@@ -621,11 +621,11 @@ Int.add.match_1  4987
 
 rank/adversarial/shift65535/12:
 phase      kHB         min…max     ms       min…max
-goal    415.96   415.89…416.00  30.67   30.33…31.42
-proof   491.81   491.75…491.92  36.30   35.62…36.58
-kernel 1109.58 1109.58…1109.58 104.70 102.20…105.34
-total  2017.36 2017.28…2017.49 171.08 170.09…172.44
-proof term: 13831 nodes, kernel 7570 ns/node
+goal    415.96   415.89…416.00  34.46   34.12…34.83
+proof   491.81   491.75…491.92  43.16   42.80…44.43
+kernel 1109.58 1109.58…1109.58 122.64 120.43…125.49
+total  2017.36 2017.28…2017.49 199.91 198.84…203.49
+proof term: 13831 nodes, kernel 8867 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1079
@@ -643,11 +643,11 @@ Int.add.match_1  2079
 
 rank/adversarial/shift65536/12:
 phase      kHB         min…max     ms       min…max
-goal    415.73   415.67…415.88  30.61   30.44…31.73
-proof   560.26   560.18…560.36  37.52   36.94…38.75
-kernel 4551.38 4551.38…4551.38 178.48 174.75…192.78
-total  5527.45 5527.23…5527.52 246.60 242.15…262.53
-proof term: 13831 nodes, kernel 12904 ns/node
+goal    415.73   415.67…415.88  34.07   33.66…34.46
+proof   560.26   560.18…560.36  44.63   44.41…44.87
+kernel 4551.38 4551.38…4551.38 192.36 189.13…198.07
+total  5527.45 5527.23…5527.52 271.24 267.58…276.36
+proof term: 13831 nodes, kernel 13908 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1079
@@ -665,11 +665,11 @@ Int.add.match_1  2079
 
 rank/adversarial/shift65537/12:
 phase      kHB         min…max     ms       min…max
-goal    415.77   415.71…415.90  30.43   30.16…31.06
-proof   491.92   491.83…491.98  35.43   35.29…36.25
-kernel 1109.58 1109.58…1109.58  99.76  97.69…104.03
-total  2017.30 2017.21…2017.32 165.48 164.52…170.03
-proof term: 13831 nodes, kernel 7213 ns/node
+goal    415.77   415.71…415.90  34.09   34.02…35.28
+proof   491.92   491.83…491.98  42.98   42.89…44.38
+kernel 1109.58 1109.58…1109.58 117.76 115.87…121.96
+total  2017.30 2017.21…2017.32 195.63 192.87…200.38
+proof term: 13831 nodes, kernel 8514 ns/node
 
 proof heads                                                   count
 HAdd.hAdd                                                      1079
