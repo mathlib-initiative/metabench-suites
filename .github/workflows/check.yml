@@ -11,7 +11,8 @@ defaults:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    # Only the Linux ARM Github runners expose the CPU instruction counter that `bench.instructions` reads.
+    runs-on: ubuntu-26.04-arm
     permissions:
       contents: read
     steps:
@@ -32,6 +33,10 @@ jobs:
           curl -sSfL https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           cp mathlib/lean-toolchain metabench/lean-toolchain
+
+      # Ubuntu's default `kernel.perf_event_paranoid` refuses perf_event_open to unprivileged users.
+      - name: Allow perf_event_open
+        run: sudo sysctl -w kernel.perf_event_paranoid=2
 
       - name: Choose the suites
         run: |

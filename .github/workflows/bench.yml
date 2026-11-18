@@ -15,6 +15,9 @@ on:
       mathlib_ref:
         description: Branch, tag or sha in that repository
         default: master
+      metabench_ref:
+        description: Branch, tag or sha of MetaBench
+        default: main
 
 env:
   SUITE: ${{ inputs.suite }}
@@ -26,7 +29,8 @@ defaults:
 
 jobs:
   bench:
-    runs-on: ubuntu-latest
+    # Only the Linux ARM Github runners expose the CPU instruction counter that `bench.instructions` reads.
+    runs-on: ubuntu-26.04-arm
     permissions:
       contents: read
     concurrency: bench-${{ inputs.suite || 'all' }}
@@ -59,6 +63,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           repository: mathlib-initiative/MetaBench
+          ref: ${{ inputs.metabench_ref }}
           path: metabench
           persist-credentials: false
 
@@ -67,6 +72,10 @@ jobs:
           curl -sSfL https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           cp mathlib/lean-toolchain metabench/lean-toolchain
+
+      # Ubuntu's default `kernel.perf_event_paranoid` refuses perf_event_open to unprivileged users.
+      - name: Allow perf_event_open
+        run: sudo sysctl -w kernel.perf_event_paranoid=2
 
       - name: Build the suites' Mathlib imports
         run: |
@@ -88,6 +97,8 @@ jobs:
               echo "MetaBench: commit $(git -C metabench rev-parse HEAD)"
               echo "Lean:      $(cat mathlib/lean-toolchain)"
               echo "Date:      $(date -u '+%Y-%m-%d %H:%M UTC')"
+              # The instruction counts depend on the CPU, and a Neoverse-N1 machine may count none.
+              echo "Runner:    $(uname -m), $(lscpu | sed -n 's/^ *Model name: *//p' | head -n 1)"
               echo
               METABENCH=metabench ./bench-run.sh mathlib "suites/$name.lean" \
                 -Dbench.proofHeads=5 -Dbench.kernelUnfolds=5 \

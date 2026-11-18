@@ -9,8 +9,9 @@ mathlib="${1:?usage: METABENCH=<harness> bench-run.sh <mathlib-dir> <suite.lean>
 suite="${2:?usage: METABENCH=<harness> bench-run.sh <mathlib-dir> <suite.lean> [lean args]}"
 shift 2
 
-if [ ! -f "$bench/lakefile.toml" ]; then
-  echo "error: METABENCH=$bench is not the benchmark library checkout" >&2; exit 2
+if [ ! -f "$bench/lakefile.lean" ]; then
+  echo "error: METABENCH=$bench is not a checkout of MetaBench with the instruction counter" >&2
+  exit 2
 fi
 if [ ! -d "$mathlib/.lake/build/lib/lean/Mathlib" ]; then
   echo "error: $mathlib is not a built Mathlib checkout" >&2; exit 2
@@ -19,7 +20,9 @@ if ! diff -q "$bench/lean-toolchain" "$mathlib/lean-toolchain" >/dev/null; then
   echo "error: toolchain mismatch: harness $(cat "$bench/lean-toolchain"), checkout $(cat "$mathlib/lean-toolchain")" >&2
   exit 2
 fi
-(cd "$bench" && lake build MetaBench >/dev/null)
+# Build MetaBench and its instruction counter (the `perfDynlib` target), which needs a C compiler.
+(cd "$bench" && lake build -q MetaBench perfDynlib)
+dynlib=$(cd "$bench" && lake query -q perfDynlib)
 
 root="$(cd "$(dirname "$0")" && pwd -P)"
 # This repository's modules, like an entry of LEAN_SRC_PATH: `import Matrix.Int` is
@@ -37,4 +40,4 @@ for module in $("$root/imports.sh" --in "$local_modules" "$mathlib" "$local_modu
   mkdir -p "$(dirname "$out")"
   run_lean -o "$out" "$local_modules/$module"
 done
-run_lean -DElab.async=false "$suite" "$@"
+run_lean -DElab.async=false -Dbench.instructions=true "--load-dynlib=$dynlib" "$suite" "$@"
