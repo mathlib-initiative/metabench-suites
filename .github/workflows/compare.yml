@@ -1,0 +1,249 @@
+# Runs suites against two Mathlib commits, base and then head, in one job, so that both run on the
+# same machine. It commits the output of both sides and a report showing them side by side to
+# compare/<time>-<base>-vs-<head>/.
+name: compare
+run-name: >-
+  ${{ inputs.suite || 'all' }},
+  ${{ inputs.pr && format('#{0}', inputs.pr) ||
+  format('{0}@{1} vs {2}@{3}', inputs.base_mathlib_repo, inputs.base_mathlib_ref,
+  inputs.head_mathlib_repo, inputs.head_mathlib_ref) }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: A comma-separated list of suites to run (e.g. Det,Rank). Set to empty to run all suites.
+        default: ''
+      base_mathlib_repo:
+        description: Base Mathlib repository, as owner/name
+        default: leanprover-community/mathlib4
+      base_mathlib_ref:
+        description: Branch, tag or sha in that repository
+        default: master
+      head_mathlib_repo:
+        description: Head Mathlib repository, as owner/name
+        default: leanprover-community/mathlib4
+      head_mathlib_ref:
+        description: Branch, tag or sha in that repository
+        default: master
+      pr:
+        description: >-
+          A leanprover-community/mathlib4 PR number. If set, the PR's head is compared with its merge
+          base, and the four fields above are ignored.
+        default: ''
+      metabench_ref:
+        description: Branch, tag or sha of MetaBench
+        default: main
+
+env:
+  SUITE: ${{ inputs.suite }}
+  PR: ${{ inputs.pr }}
+  BENCH_OPTIONS: -Dbench.proofHeads=5 -Dbench.kernelUnfolds=5
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  compare:
+    # Only the Linux ARM Github runners expose the CPU instruction counter that `bench.instructions` reads.
+    runs-on: ubuntu-26.04-arm
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ssh-key: ${{ secrets.BENCH_DEPLOY_KEY }}
+
+      - name: Choose the suites
+        run: |
+          names=$(echo "$SUITE" | tr ',' ' ' | xargs)
+          # Running all suites leaves out those marked `-- MetaBench CI exclude: #<PR>`, which need that
+          # PR's code.
+          if [ -z "$names" ]; then
+            names=$(for suite in suites/*.lean; do
+              grep -q '^-- MetaBench CI exclude:' "$suite" || basename -s .lean "$suite"
+            done | xargs)
+          fi
+          for name in $names; do
+            if [ ! -f "suites/$name.lean" ]; then echo "::error::No suite named '$name'"; exit 1; fi
+          done
+          echo "SUITES=$names" >> "$GITHUB_ENV"
+
+      - name: Resolve the two Mathlib commits
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_REPO: ${{ inputs.base_mathlib_repo }}
+          BASE_REF: ${{ inputs.base_mathlib_ref }}
+          HEAD_REPO: ${{ inputs.head_mathlib_repo }}
+          HEAD_REF: ${{ inputs.head_mathlib_ref }}
+        run: |
+          # A side's name in the output folder: the ref, prefixed with the owner outside
+          # leanprover-community/mathlib4 (e.g. master, alice@branch).
+          label() {
+            local name=$2
+            if [[ $name =~ ^[0-9a-f]{40}$ ]]; then name=${name:0:10}; fi
+            if [ "$1" != leanprover-community/mathlib4 ]; then name="${1%%/*}@$name"; fi
+            echo "${name//[^A-Za-z0-9._@-]/-}"
+          }
+          if [ -n "$PR" ]; then
+            gh api "repos/leanprover-community/mathlib4/pulls/$PR" > "$RUNNER_TEMP/pr.json"
+            HEAD_REPO=$(jq -r '.head.repo.full_name // empty' "$RUNNER_TEMP/pr.json")
+            if [ -z "$HEAD_REPO" ]; then echo "::error::The head repository of #$PR no longer exists"; exit 1; fi
+            HEAD_REF=$(jq -r .head.sha "$RUNNER_TEMP/pr.json")
+            BASE_REPO=leanprover-community/mathlib4
+            base_branch=$(jq -r .base.ref "$RUNNER_TEMP/pr.json")
+            # The merge base, so that the comparison sees only the PR's own changes.
+            BASE_REF=$(gh api "repos/$BASE_REPO/compare/$base_branch...$HEAD_REF?per_page=1" \
+              --jq .merge_base_commit.sha)
+            base_target="$BASE_REPO, merge base with $base_branch"
+            head_target="$HEAD_REPO@$(jq -r .head.ref "$RUNNER_TEMP/pr.json")"
+            labels="$(label "$BASE_REPO" "$BASE_REF")-vs-pr$PR"
+          else
+            base_target="$BASE_REPO@$BASE_REF"
+            head_target="$HEAD_REPO@$HEAD_REF"
+            labels="$(label "$BASE_REPO" "$BASE_REF")-vs-$(label "$HEAD_REPO" "$HEAD_REF")"
+          fi
+          now=$(date -u +%s)
+          {
+            echo "BASE_REPO=$BASE_REPO"
+            echo "BASE_REF=$BASE_REF"
+            echo "BASE_TARGET=$base_target"
+            echo "HEAD_REPO=$HEAD_REPO"
+            echo "HEAD_REF=$HEAD_REF"
+            echo "HEAD_TARGET=$head_target"
+            echo "DATE=$(date -u -d "@$now" '+%Y-%m-%d %H:%M UTC')"
+            echo "OUT=compare/$(date -u -d "@$now" +%Y-%m-%d-%H%M%S)-$labels"
+          } >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v5
+        with:
+          repository: mathlib-initiative/MetaBench
+          ref: ${{ inputs.metabench_ref }}
+          path: metabench
+          persist-credentials: false
+
+      - name: Install Lean
+        run: |
+          curl -sSfL https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      # Ubuntu's default `kernel.perf_event_paranoid` refuses perf_event_open to unprivileged users.
+      - name: Allow perf_event_open
+        run: sudo sysctl -w kernel.perf_event_paranoid=2
+
+      # Both sides use one checkout, so the head's `cache get` decompresses only the files that differ.
+      - name: Benchmark base, then head
+        run: |
+          git init -q mathlib
+          git -C mathlib remote add origin "https://github.com/$BASE_REPO"
+          bench() {
+            local side=$1 repo=$2 ref=$3 files="" runnable="" name imports tag
+            git -C mathlib fetch -q --depth 1 --no-tags "https://github.com/$repo" "$ref"
+            git -C mathlib checkout -q -f --detach FETCH_HEAD
+            cp mathlib/lean-toolchain metabench/lean-toolchain
+            mkdir -p "$OUT/$side"
+            # A suite whose imports do not resolve on this side (e.g. a module that only the head adds)
+            # is skipped there, and the report shows it without results.
+            for name in $SUITES; do
+              if imports=$(METABENCH=metabench ./imports.sh --in mathlib mathlib shared "suites/$name.lean" \
+                  2> "$OUT/$side/$name.txt"); then
+                files="$files $imports"
+                runnable="$runnable $name"
+              else
+                echo "::warning::$name cannot run on $side, see $OUT/$side/$name.txt"
+              fi
+            done
+            if [ -n "$runnable" ]; then
+              # The checkout's remote is the base repository, so name the repository whose cache to read.
+              (cd mathlib && lake exe cache get --repo="$repo" $files)
+              # `cache get` only warns about files it could not fetch, so check that none is left to build.
+              if ! (cd mathlib && lake build --no-build $files); then
+                echo "::error::The Mathlib cache of $side ($repo@$ref) is incomplete. Mathlib's CI may not have built it yet."
+                exit 1
+              fi
+            fi
+            tag="$repo@$ref $(git -C mathlib rev-parse --short=10 HEAD)"
+            for name in $runnable; do
+              if ! METABENCH=metabench ./bench-run.sh mathlib "suites/$name.lean" $BENCH_OPTIONS \
+                  -Dbench.out="$OUT/$side/$name.jsonl" -Dbench.tag="$tag" 2>&1 | tee "$OUT/$side/$name.txt"; then
+                echo "::warning::$name failed on $side, see $OUT/$side/$name.txt"
+              fi
+            done
+            echo "${side^^}_SHA=$(git -C mathlib rev-parse HEAD)" >> "$GITHUB_ENV"
+            echo "${side^^}_LEAN=$(cat mathlib/lean-toolchain)" >> "$GITHUB_ENV"
+          }
+          bench base "$BASE_REPO" "$BASE_REF"
+          bench head "$HEAD_REPO" "$HEAD_REF"
+
+      - name: Write the report
+        run: |
+          count() { if [ -f "$1" ]; then wc -l < "$1"; else echo 0; fi; }
+          # The benchmarks of the second JSONL file that the first lacks.
+          missing() {
+            jq -rn --slurpfile a "$1" --slurpfile b "$2" '[$b[].label] - [$a[].label] | map("`\(.)`") | join(", ")'
+          }
+          # GitHub's view of the code that changed from base to head.
+          head_commit=$HEAD_SHA
+          if [ "$HEAD_REPO" != "$BASE_REPO" ]; then head_commit="${HEAD_REPO/\//:}:$HEAD_SHA"; fi
+          compare_url="https://github.com/$BASE_REPO/compare/$BASE_SHA...$head_commit"
+          {
+            if [ -n "$PR" ]; then
+              echo "# ${SUITES// /, }: #$PR against its merge base"
+            else
+              echo "# ${SUITES// /, }: $BASE_TARGET vs $HEAD_TARGET"
+            fi
+            echo
+            echo "| | base | head |"
+            echo "|---|---|---|"
+            echo "| Mathlib | $BASE_TARGET | $HEAD_TARGET |"
+            echo "| Commit | [\`${BASE_SHA:0:10}\`](https://github.com/$BASE_REPO/commit/$BASE_SHA)" \
+              "| [\`${HEAD_SHA:0:10}\`](https://github.com/$HEAD_REPO/commit/$HEAD_SHA) |"
+            echo "| Lean | $BASE_LEAN | $HEAD_LEAN |"
+            echo
+            if [ -n "$PR" ]; then jq -r '"- PR: [#\(.number) \(.title)](\(.html_url))"' "$RUNNER_TEMP/pr.json"; fi
+            echo "- Code delta: [${BASE_SHA:0:10}...${HEAD_SHA:0:10}]($compare_url)"
+            for name in $SUITES; do
+              base=$OUT/base/$name.jsonl head=$OUT/head/$name.jsonl
+              line="- $name: $(count "$base") benchmarks on base, $(count "$head") on head."
+              if [ -f "$base" ] && [ -f "$head" ]; then
+                only=$(missing "$base" "$head")
+                if [ -n "$only" ]; then line="$line Missing on base: $only."; fi
+                only=$(missing "$head" "$base")
+                if [ -n "$only" ]; then line="$line Missing on head: $only."; fi
+              fi
+              echo "$line"
+            done
+            echo "- MetaBench commit \`$(git -C metabench rev-parse --short=10 HEAD)\`, options \`$BENCH_OPTIONS\`."
+            echo "- Runner: $(uname -m), $(lscpu | sed -n 's/^ *Model name: *//p' | head -n 1)." \
+              "Base ran first, then head, in one job on $DATE."
+            if [ "$BASE_LEAN" != "$HEAD_LEAN" ]; then
+              echo
+              echo "> [!WARNING]"
+              echo "> The two sides use different Lean toolchains, so the changes include Lean's own."
+            fi
+            for name in $SUITES; do
+              echo
+              echo "## $name"
+              echo
+              echo "Base on the left, head on the right. \`|\` marks a changed line, \`<\` and \`>\` a line on" \
+                "one side only. Raw output: [base](base/$name.txt), [head](head/$name.txt)."
+              echo
+              # Four backticks, since the output may hold error messages that contain three.
+              echo '````text'
+              # diff exits with 1 when the sides differ.
+              diff -y -t -W 200 "$OUT/base/$name.txt" "$OUT/head/$name.txt" || true
+              echo '````'
+            done
+          } > "$OUT/report.md"
+
+      - name: Commit the report
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR_ID+$GITHUB_ACTOR@users.noreply.github.com"
+          git add "$OUT"
+          git commit -q -m "compare: ${OUT#compare/}"
+          git pull -q --rebase origin "$GITHUB_REF_NAME"
+          git push -q origin "HEAD:$GITHUB_REF_NAME"
+          url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$(git rev-parse HEAD)/$OUT/report.md"
+          echo "- [$OUT/report.md]($url)" >> "$GITHUB_STEP_SUMMARY"

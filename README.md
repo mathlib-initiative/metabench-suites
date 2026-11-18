@@ -70,6 +70,16 @@ The CI runs on a Linux ARM runner, because GitHub's other runners have no instru
 > Wall-clock times of benchmarks between different runs are not comparable because of the variability of GitHub Action agents.
 > Instruction counts on the same kind of runner can be used for comparison.
 
+## CI comparison run
+
+The [compare.yml](.github/workflows/compare.yml) workflow runs suites against two Mathlib commits in
+one job, base first and then head, so that both run on the same machine. Given a Mathlib PR number,
+it compares the PR's head with its merge base. Otherwise it takes a repository and a ref for each
+side. Both commits must be in Mathlib's cache, since the workflow does not build Mathlib.
+
+Each run commits a folder `compare/<time>-<base>-vs-<head>/` holding the raw output of both sides
+and a `report.md` that shows them side by side.
+
 ## Suites for code not yet on Mathlib master
 
 A suite that benchmarks an open Mathlib PR carries a line `-- MetaBench CI exclude: #<PR number>`.
