@@ -1,15 +1,16 @@
-Mathlib:   leanprover-community/mathlib4@master, commit 7668accf6b4170dc7345265a505a1b7041b52146
-MetaBench: commit ff07a08153d928ad6fa19a723165cf657a0f4fa9
+Mathlib:   leanprover-community/mathlib4@master, commit f0b74ff7ddc23ca83a2eb7310326ec88b7a6502c
+MetaBench: commit 441aac67f003ebeacfefecdec0abf86daa1a7c76
 Lean:      leanprover/lean4:v4.36.0
-Date:      2026-11-17 13:02 UTC
+Date:      2026-11-18 10:46 UTC
+Runner:    aarch64, Neoverse-N2
 
 primality/curve25519-p:
-phase     kHB       min…max    ms     min…max
-goal    33.74   33.71…33.75  2.83   2.73…2.87
-proof  356.86 356.80…356.88 30.47 30.01…31.35
-kernel 540.98 540.98…540.98 63.76 62.14…64.80
-total  931.56 931.52…931.61 97.80 94.88…98.05
-proof term: 3348 nodes, kernel 19044 ns/node
+phase     kHB       min…max     ms       min…max  Minstr         min…max
+goal    33.74   33.71…33.76   3.28     3.22…3.35   9.772     9.766…9.783
+proof  356.86 356.81…356.88  37.72   36.96…38.32 136.815 136.098…136.896
+kernel 540.98 540.98…540.98  69.98   68.32…71.33 406.372 405.952…406.672
+total  931.56 931.53…931.62 110.79 109.60…111.65 552.896 551.821…553.350
+proof term: 3348 nodes, kernel 20902 ns/node
 
 proof heads    count
 Membership.mem    89
@@ -26,12 +27,12 @@ Decidable.decide  1496
 Nat.decEq         1408
 
 primality/p384-p:
-phase      kHB         min…max     ms       min…max
-goal    217.52   217.39…218.07  14.39   14.23…14.51
-proof   534.86   534.83…534.91  45.81   45.48…47.26
-kernel  890.90   890.90…890.90 108.10 106.86…112.70
-total  1643.32 1643.14…1643.80 168.41 166.60…174.25
-proof term: 4563 nodes, kernel 23690 ns/node
+phase      kHB         min…max     ms       min…max  Minstr         min…max
+goal    217.52   217.39…218.07  16.15   15.79…16.77  64.132   63.879…64.233
+proof   534.87   534.84…534.91  55.19   54.49…59.88 210.755 209.509…211.200
+kernel  890.91   890.91…890.91 122.43 119.97…126.78 680.606 680.293…680.809
+total  1643.33 1643.15…1643.81 193.24 191.30…202.07 955.268 953.745…955.981
+proof term: 4563 nodes, kernel 26830 ns/node
 
 proof heads    count
 Membership.mem   133
@@ -48,12 +49,12 @@ Decidable.decide  2556
 Nat.decEq         2423
 
 primality/m521:
-phase      kHB         min…max     ms       min…max
-goal     33.81     33.79…33.97   2.85     2.83…2.96
-proof   622.60   622.56…622.72  53.94   53.19…54.52
-kernel 1649.83 1649.83…1649.83 228.67 226.29…234.12
-total  2306.36 2306.18…2306.41 285.64 283.17…291.13
-proof term: 4940 nodes, kernel 46290 ns/node
+phase      kHB         min…max     ms       min…max   Minstr           min…max
+goal     33.82     33.80…33.97   3.24     3.14…3.39    9.800       9.763…9.842
+proof   622.60   622.57…622.73  62.89   61.88…65.53  264.383   262.765…264.844
+kernel 1649.83 1649.83…1649.83 250.40 242.95…260.62 1352.721 1352.405…1353.133
+total  2306.37 2306.19…2306.42 316.54 307.97…326.45 1626.853 1624.993…1627.803
+proof term: 4940 nodes, kernel 50688 ns/node
 
 proof heads    count
 Membership.mem   167
@@ -70,12 +71,12 @@ Decidable.decide  5041
 Bool.casesOn      4893
 
 primality/factorial-154:
-phase      kHB         min…max     ms       min…max
-goal      2.79       2.79…2.79   0.62     0.60…0.63
-proof   224.90   224.87…224.98  31.74   31.66…32.15
-kernel 2508.37 2508.37…2508.37 426.42 424.08…431.25
-total  2736.06 2736.03…2736.14 458.78 456.34…464.03
-proof term: 2304 nodes, kernel 185079 ns/node
+phase      kHB         min…max     ms       min…max   Minstr           min…max
+goal      2.79       2.79…2.79   0.73     0.72…0.77    2.910       2.897…2.911
+proof   224.90   224.88…224.98  34.78   34.44…34.84  197.920   197.845…198.064
+kernel 2508.37 2508.37…2508.37 493.85 475.01…497.00 2576.141 2575.737…2576.429
+total  2736.07 2736.04…2736.15 529.47 510.19…532.50 2776.972 2776.552…2777.400
+proof term: 2304 nodes, kernel 214346 ns/node
 
 proof heads                         count
 Mathlib.Meta.NormNum.minFacHelper_3    86
@@ -92,12 +93,12 @@ Decidable.decide  8228
 Nat.decEq         8192
 
 primality/gf-46-512:
-phase     kHB       min…max     ms       min…max
-goal    33.87   33.82…33.93   2.90     2.85…3.52
-proof   25.46   25.45…25.49  20.19   19.94…20.41
-kernel 437.42 437.42…437.42 149.28 148.45…153.49
-total  496.75 496.69…496.82 172.20 171.49…177.41
-proof term: 395 nodes, kernel 377923 ns/node
+phase     kHB       min…max     ms       min…max   Minstr           min…max
+goal    33.87   33.82…33.94   3.39     3.30…3.40    9.811       9.795…9.851
+proof   25.47   25.45…25.50  17.93   17.83…18.12  166.460   166.398…166.481
+kernel 437.42 437.42…437.42 133.10 131.38…133.21 1084.362 1084.193…1084.538
+total  496.76 496.69…496.83 154.45 152.70…154.58 1260.634 1260.485…1260.849
+proof term: 395 nodes, kernel 336964 ns/node
 
 proof heads                          count
 Eq.refl                                 13
@@ -114,12 +115,12 @@ Mul.mul         1438
 Bool.rec        1427
 
 primality/proth-5-5947:
-phase     kHB       min…max     ms       min…max
-goal    46.46   46.45…46.55   3.80     3.79…3.85
-proof   27.39   27.36…27.53 121.99 120.73…123.96
-kernel 904.46 904.46…904.46 733.65 731.73…742.16
-total  978.31 978.27…978.49 859.52 857.73…868.77
-proof term: 447 nodes, kernel 1641269 ns/node
+phase     kHB       min…max     ms       min…max   Minstr           min…max
+goal    46.46   46.45…46.55   4.26     4.25…4.31   13.545     13.520…13.584
+proof   27.39   27.36…27.53  81.96   81.92…82.24  882.680   882.630…882.737
+kernel 904.47 904.47…904.47 612.65 609.65…613.45 5699.863 5699.754…5699.943
+total  978.32 978.28…978.50 699.11 695.92…699.64 6596.084 6596.018…6596.146
+proof term: 447 nodes, kernel 1370591 ns/node
 
 proof heads                          count
 Eq.refl                                 13
