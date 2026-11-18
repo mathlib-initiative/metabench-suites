@@ -8,8 +8,21 @@ Each suite is one file of `#benchmark` declarations, `suites/<Name>.lean`.
 
 You need:
 * A checkout of MetaBench
-* And a Mathlib checkout that has modules the suite imports prebuilt
+* A Mathlib checkout that has modules the suite imports prebuilt
 * Both MetaBench and Mathlib using the same Lean toolchain.
+* A C compiler, available on the PATH as `cc`, which MetaBench uses to build its CPU instruction counter. On macOS, install the Xcode Command Line Tools:
+
+  ```
+  xcode-select --install
+  ```
+
+  On Debian or Ubuntu, install `build-essential`:
+
+  ```
+  sudo apt install build-essential
+  ```
+
+Then use the `bench-run.sh` script to run the benchmark:
 
 ```
 METABENCH=<metabench-checkout> ./bench-run.sh <mathlib-checkout> suites/Rank.lean
@@ -23,6 +36,22 @@ METABENCH=<metabench-checkout> ./bench-run.sh <mathlib-checkout> suites/Rank.lea
 
 The output format is described in the MetaBench README.
 
+### Counting instructions
+
+`./bench-run.sh` counts the CPU instructions of each phase. This works on macOS, and on Linux where the machine has a hardware instruction counter and `kernel.perf_event_paranoid` is 2 or lower.
+
+On Debian you can set `kernel.perf_event_paranoid` using:
+```
+sudo sysctl kernel.perf_event_paranoid=2
+```
+
+Most virtual machines and containers have no counter, and a benchmark then fails saying so. To run
+without counting, add `-Dbench.instructions=false`:
+
+```
+METABENCH=<metabench-checkout> ./bench-run.sh <mathlib-checkout> suites/Rank.lean -Dbench.instructions=false
+```
+
 ## Shared modules
 
 Lean modules intended to be shared between benchmark suites should be placed in `shared/`. The
@@ -31,12 +60,15 @@ Lean modules intended to be shared between benchmark suites should be placed in 
 ## CI benchmark run
 
 The [bench.yml](.github/workflows/bench.yml) workflow can be used to trigger CI runs of benchmarks
-against a specified mathlib repository and branch.
+against a specified mathlib repository and branch, and optionally a MetaBench branch.
 
 The results of each CI benchmark run are committed to the [results/](results/) directory.
 
+The CI runs on a Linux ARM runner, because GitHub's other runners have no instruction counter.
+
 > [!WARNING]
 > Wall-clock times of benchmarks between different runs are not comparable because of the variability of GitHub Action agents.
+> Instruction counts on the same kind of runner can be used for comparison.
 
 ## Suites for code not yet on Mathlib master
 
