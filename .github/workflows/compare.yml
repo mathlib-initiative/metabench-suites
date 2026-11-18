@@ -183,10 +183,6 @@ jobs:
           missing() {
             jq -rn --slurpfile a "$1" --slurpfile b "$2" '[$b[].label] - [$a[].label] | map("`\(.)`") | join(", ")'
           }
-          # GitHub's view of the code that changed from base to head.
-          head_commit=$HEAD_SHA
-          if [ "$HEAD_REPO" != "$BASE_REPO" ]; then head_commit="${HEAD_REPO/\//:}:$HEAD_SHA"; fi
-          compare_url="https://github.com/$BASE_REPO/compare/$BASE_SHA...$head_commit"
           {
             if [ -n "$PR" ]; then
               echo "# ${SUITES// /, }: #$PR against its merge base"
@@ -202,7 +198,6 @@ jobs:
             echo "| Lean | $BASE_LEAN | $HEAD_LEAN |"
             echo
             if [ -n "$PR" ]; then jq -r '"- PR: [#\(.number) \(.title)](\(.html_url))"' "$RUNNER_TEMP/pr.json"; fi
-            echo "- Code delta: [${BASE_SHA:0:10}...${HEAD_SHA:0:10}]($compare_url)"
             for name in $SUITES; do
               base=$OUT/base/$name.jsonl head=$OUT/head/$name.jsonl
               line="- $name: $(count "$base") benchmarks on base, $(count "$head") on head."
