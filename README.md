@@ -77,7 +77,7 @@ one job, base first and then head, so that both run on the same machine. Given a
 it compares the PR's head with its merge base. Otherwise it takes a repository and a ref for each
 side. Both commits must be in Mathlib's cache, since the workflow does not build Mathlib.
 
-Each run commits a folder `compare/<time>-<base>-vs-<head>/` holding the raw output of both sides
+Each run commits a folder `comparisons/<time>-<base>-vs-<head>/` holding the raw output of both sides
 and a `report.md` that shows them side by side.
 
 ## Suites for code not yet on Mathlib master

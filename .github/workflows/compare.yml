@@ -1,6 +1,6 @@
 # Runs suites against two Mathlib commits, base and then head, in one job, so that both run on the
 # same machine. It commits the output of both sides and a report showing them side by side to
-# compare/<time>-<base>-vs-<head>/.
+# comparisons/<time>-<base>-vs-<head>/.
 name: compare
 run-name: >-
   ${{ inputs.suite || 'all' }},
@@ -116,7 +116,7 @@ jobs:
             echo "HEAD_REF=$HEAD_REF"
             echo "HEAD_MATHLIB=$head_mathlib"
             echo "DATE=$(date -u -d "@$now" '+%Y-%m-%d %H:%M UTC')"
-            echo "OUT=compare/$(date -u -d "@$now" +%Y-%m-%d-%H%M%S)-$labels"
+            echo "OUT=comparisons/$(date -u -d "@$now" +%Y-%m-%d-%H%M%S)-$labels"
           } >> "$GITHUB_ENV"
 
       - uses: actions/checkout@v5
@@ -188,6 +188,28 @@ jobs:
           missing() {
             jq -rn --slurpfile a "$1" --slurpfile b "$2" '[$b[].label] - [$a[].label] | map("`\(.)`") | join(", ")'
           }
+          # A table of each benchmark's medians, base → head. MetaBench's median is sorted[n/2], and its
+          # total sums the three phases in each iteration. Times are not marked, since they differ between
+          # the two sides more than between the iterations of one side.
+          table() {
+            jq -rn --slurpfile base "$1" --slurpfile head "$2" '
+              def stats($p; $m):
+                [.iters[] | if $p == "total" then .goal[$m] + .proof[$m] + .kernel[$m] else .[$p][$m] end]
+                | sort | {lo: .[0], med: .[length / 2 | floor], hi: .[-1]};
+              def rounded($unit; $places): . / $unit * pow(10; $places) | round / pow(10; $places);
+              "| benchmark | phase | kHB | ms | Minstr |", "|---|---|---|---|---|",
+              ($base[] as $x | $head[] | select(.label == $x.label) as $y
+                | ["goal", "proof", "kernel", "total"][] as $p
+                | [["heartbeats", 1e3, 2, true], ["nanos", 1e6, 2, false], ["instructions", 1e6, 3, true]]
+                | map(. as [$m, $unit, $places, $mark] | ($x | stats($p; $m)) as $b | ($y | stats($p; $m)) as $h
+                    | (if $b.med > 0 then ($h.med / $b.med - 1) * 1000 | round / 10 else null end) as $pct
+                    | (if $mark and $h.lo > $b.hi and $pct >= 2 then "🟥 "
+                       elif $mark and $h.hi < $b.lo and $pct <= -2 then "✅ " else "" end)
+                      + "\($b.med | rounded($unit; $places)) → \($h.med | rounded($unit; $places))"
+                      + if $pct == null then "" elif $pct > 0 then " (+\($pct)%)"
+                        elif $pct < 0 then " (\($pct)%)" else " (0%)" end)
+                | "| \(if $p == "goal" then "`\($x.label)`" else "" end) | \($p) | \(join(" | ")) |")'
+          }
           {
             if [ -n "$PR" ]; then
               echo "# ${SUITES// /, }: #$PR against its merge base"
@@ -223,9 +245,18 @@ jobs:
               echo "> The two sides use different Lean toolchains, so the changes include Lean's own."
             fi
             for name in $SUITES; do
+              base=$OUT/base/$name.jsonl head=$OUT/head/$name.jsonl
               echo
               echo "## $name"
               echo
+              if [ -f "$base" ] && [ -f "$head" ]; then
+                echo "Medians, base → head. 🟥 and ✅ mark a heartbeat or instruction count that changed by at" \
+                  "least 2% and whose samples on the two sides do not overlap."
+                echo
+                # A failure here would skip the commit step and lose the output of both sides.
+                table "$base" "$head" || { echo; echo "The table could not be computed (see the step's log)."; }
+                echo
+              fi
               echo "Base on the left, head on the right. \`|\` marks a changed line, \`<\` and \`>\` a line on" \
                 "one side only. Raw output: [base](base/$name.txt), [head](head/$name.txt)."
               echo
@@ -242,7 +273,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR_ID+$GITHUB_ACTOR@users.noreply.github.com"
           git add "$OUT"
-          git commit -q -m "compare: ${OUT#compare/}"
+          git commit -q -m "compare: ${OUT#comparisons/}"
           git pull -q --rebase origin "$GITHUB_REF_NAME"
           git push -q origin "HEAD:$GITHUB_REF_NAME"
           url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/blob/$(git rev-parse HEAD)/$OUT/report.md"
