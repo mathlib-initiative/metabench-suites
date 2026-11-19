@@ -78,7 +78,7 @@ it compares the PR's head with its merge base. Otherwise it takes a repository a
 side. Both commits must be in Mathlib's cache, since the workflow does not build Mathlib.
 
 Each run commits a folder `comparisons/<time>-<base>-vs-<head>/` holding the raw output of both sides
-and a `report.md` that shows them side by side.
+and a `report.md` that compares their medians.
 
 ## Suites for code not yet on Mathlib master
 

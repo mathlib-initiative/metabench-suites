@@ -1,5 +1,5 @@
 # Runs suites against two Mathlib commits, base and then head, in one job, so that both run on the
-# same machine. It commits the output of both sides and a report showing them side by side to
+# same machine. It commits the output of both sides and a report comparing their medians to
 # comparisons/<time>-<base>-vs-<head>/.
 name: compare
 run-name: >-
@@ -257,14 +257,7 @@ jobs:
                 table "$base" "$head" || { echo; echo "The table could not be computed (see the step's log)."; }
                 echo
               fi
-              echo "Base on the left, head on the right. \`|\` marks a changed line, \`<\` and \`>\` a line on" \
-                "one side only. Raw output: [base](base/$name.txt), [head](head/$name.txt)."
-              echo
-              # Four backticks, since the output may hold error messages that contain three.
-              echo '````text'
-              # diff exits with 1 when the sides differ.
-              diff -y -t -W 200 "$OUT/base/$name.txt" "$OUT/head/$name.txt" || true
-              echo '````'
+              echo "Raw output: [base](base/$name.txt), [head](head/$name.txt)."
             done
           } > "$OUT/report.md"
 
