@@ -1,0 +1,110 @@
+exp/1/bits100:
+phase     kHB       min…max    ms     min…max  Minstr         min…max
+goal     5.68     5.67…5.69  0.76   0.71…0.83   1.642     1.639…1.649
+proof   92.25   92.22…92.27  7.88   7.61…7.99  30.412   30.394…30.459
+kernel 130.91 130.91…130.91 17.39 17.22…19.38 102.827 102.812…102.862
+total  228.84 228.82…228.86 26.13 25.57…27.86 134.877 134.850…134.954
+proof term: 91 nodes, kernel 191108 ns/node
+
+proof heads            count
+OfNat.ofNat                2
+Bool.true                  1
+Dyadic                     1
+Dyadic.instDecidableLT     1
+Dyadic.instLT              1
+
+kernel unfolds count
+Int.casesOn      651
+Int.rec          621
+Bool.rec         242
+Nat.rec          230
+Bool.casesOn     222
+
+exp/1/bits1000:
+phase     kHB       min…max    ms     min…max  Minstr         min…max
+goal     6.47     6.46…6.48  1.11   1.10…1.13   2.986     2.979…3.000
+proof   88.39   88.30…88.45  8.62   8.49…8.68  31.047   31.002…31.101
+kernel 339.97 339.97…339.97 49.06 48.43…49.17 267.717 267.569…267.756
+total  434.83 434.75…434.89 58.76 58.12…58.90 301.702 301.594…301.832
+proof term: 91 nodes, kernel 539122 ns/node
+
+proof heads            count
+OfNat.ofNat                2
+Bool.true                  1
+Dyadic                     1
+Dyadic.instDecidableLT     1
+Dyadic.instLT              1
+
+kernel unfolds count
+Int.casesOn     1781
+Int.rec         1667
+Bool.rec         644
+Bool.casesOn     600
+Nat.rec          590
+
+exp/1/bits10000:
+phase      kHB         min…max     ms       min…max  Minstr         min…max
+goal     14.61     14.59…14.62   3.02     2.98…3.13  22.397   22.276…23.016
+proof    92.53     92.49…92.60  13.34   13.10…13.90  75.684   75.580…75.804
+kernel 1056.76 1056.76…1056.76 165.40 160.25…168.26 848.493 848.293…848.758
+total  1163.89 1163.85…1163.97 182.29 176.71…184.38 946.753 946.263…947.088
+proof term: 91 nodes, kernel 1817596 ns/node
+
+proof heads            count
+OfNat.ofNat                2
+Bool.true                  1
+Dyadic                     1
+Dyadic.instDecidableLT     1
+Dyadic.instLT              1
+
+kernel unfolds count
+Int.casesOn     5651
+Int.rec         5267
+Bool.rec        2019
+Bool.casesOn    1902
+Nat.rec         1826
+
+exp/10.1/bits2000:
+phase     kHB       min…max    ms     min…max  Minstr         min…max
+goal     6.23     6.22…6.25  1.17   1.15…1.20   4.275     4.264…4.280
+proof   67.29   67.24…67.39 12.43 12.34…12.55  85.169   85.105…85.441
+kernel 493.85 493.85…493.86 75.43 74.00…78.88 418.479 418.379…418.555
+total  567.37 567.34…567.46 89.01 87.51…92.56 507.941 507.823…508.210
+proof term: 86 nodes, kernel 877059 ns/node
+
+proof heads                                 count
+Inclusion.IntervalDyadicReal.scientific         2
+Inclusion.IntervalDyadicReal.scientific_mem     2
+OfScientific.ofScientific                       2
+Bool.true                                       1
+Dyadic                                          1
+
+kernel unfolds count
+Int.casesOn     2620
+Int.rec         2462
+Bool.rec         949
+Bool.casesOn     888
+Nat.rec          878
+
+exp/0.3/bits2000:
+phase     kHB       min…max    ms     min…max  Minstr         min…max
+goal     6.22     6.21…6.23  1.18   1.16…1.23   4.251     4.239…4.258
+proof   67.23   67.17…67.28 11.95 11.83…12.09  79.786   79.642…79.793
+kernel 443.06 443.06…443.06 68.42 67.05…70.24 375.039 374.973…375.147
+total  516.52 516.45…516.56 81.54 80.16…83.42 459.038 459.012…459.186
+proof term: 86 nodes, kernel 795629 ns/node
+
+proof heads                                 count
+Inclusion.IntervalDyadicReal.scientific         2
+Inclusion.IntervalDyadicReal.scientific_mem     2
+OfScientific.ofScientific                       2
+Bool.true                                       1
+Dyadic                                          1
+
+kernel unfolds count
+Int.casesOn     2350
+Int.rec         2186
+Bool.rec         838
+Bool.casesOn     781
+Nat.rec          757
+
