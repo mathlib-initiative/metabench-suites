@@ -39,6 +39,9 @@ env:
   SUITE: ${{ inputs.suite }}
   PR: ${{ inputs.pr }}
   BENCH_OPTIONS: -Dbench.proofHeads=5 -Dbench.kernelUnfolds=5
+  # Mathlib's CI uploads the cache of a commit outside master (e.g. on a `bump/*` branch) to the
+  # `forks` container, which `cache get` reads for leanprover-community/mathlib4 only when asked.
+  MATHLIB_CACHE_FROM: master,forks
 
 defaults:
   run:
@@ -70,7 +73,7 @@ jobs:
           done
           echo "SUITES=$names" >> "$GITHUB_ENV"
 
-      - name: Resolve the two Mathlib commits
+      - name: Choose the two Mathlib commits
         env:
           GH_TOKEN: ${{ github.token }}
           BASE_REPO: ${{ inputs.base_mathlib_repo }}
@@ -96,22 +99,22 @@ jobs:
             # The merge base, so that the comparison sees only the PR's own changes.
             BASE_REF=$(gh api "repos/$BASE_REPO/compare/$base_branch...$HEAD_REF?per_page=1" \
               --jq .merge_base_commit.sha)
-            base_target="$BASE_REPO, merge base with $base_branch"
-            head_target="$HEAD_REPO@$(jq -r .head.ref "$RUNNER_TEMP/pr.json")"
+            base_mathlib="$BASE_REPO, merge base with $base_branch"
+            head_mathlib="$HEAD_REPO@$(jq -r .head.ref "$RUNNER_TEMP/pr.json")"
             labels="$(label "$BASE_REPO" "$BASE_REF")-vs-pr$PR"
           else
-            base_target="$BASE_REPO@$BASE_REF"
-            head_target="$HEAD_REPO@$HEAD_REF"
+            base_mathlib="$BASE_REPO@$BASE_REF"
+            head_mathlib="$HEAD_REPO@$HEAD_REF"
             labels="$(label "$BASE_REPO" "$BASE_REF")-vs-$(label "$HEAD_REPO" "$HEAD_REF")"
           fi
           now=$(date -u +%s)
           {
             echo "BASE_REPO=$BASE_REPO"
             echo "BASE_REF=$BASE_REF"
-            echo "BASE_TARGET=$base_target"
+            echo "BASE_MATHLIB=$base_mathlib"
             echo "HEAD_REPO=$HEAD_REPO"
             echo "HEAD_REF=$HEAD_REF"
-            echo "HEAD_TARGET=$head_target"
+            echo "HEAD_MATHLIB=$head_mathlib"
             echo "DATE=$(date -u -d "@$now" '+%Y-%m-%d %H:%M UTC')"
             echo "OUT=compare/$(date -u -d "@$now" +%Y-%m-%d-%H%M%S)-$labels"
           } >> "$GITHUB_ENV"
@@ -136,12 +139,15 @@ jobs:
       - name: Benchmark base, then head
         run: |
           git init -q mathlib
-          git -C mathlib remote add origin "https://github.com/$BASE_REPO"
           bench() {
-            local side=$1 repo=$2 ref=$3 files="" runnable="" name imports tag
-            git -C mathlib fetch -q --depth 1 --no-tags "https://github.com/$repo" "$ref"
+            local side=$1 repo=$2 ref=$3 MATHLIB=$4 files="" runnable="" name imports tag
+            # `cache get` reads the cache of the repository that `origin` points to.
+            git -C mathlib config remote.origin.url "https://github.com/$repo"
+            git -C mathlib fetch -q --depth 1 --no-tags origin "$ref"
             git -C mathlib checkout -q -f --detach FETCH_HEAD
             cp mathlib/lean-toolchain metabench/lean-toolchain
+            # A failure to fetch the toolchain or packages stops the job here, not as unrunnable suites below.
+            (cd mathlib && lake env true)
             mkdir -p "$OUT/$side"
             # A suite whose imports do not resolve on this side (e.g. a module that only the head adds)
             # is skipped there, and the report shows it without results.
@@ -155,15 +161,14 @@ jobs:
               fi
             done
             if [ -n "$runnable" ]; then
-              # The checkout's remote is the base repository, so name the repository whose cache to read.
-              (cd mathlib && lake exe cache get --repo="$repo" $files)
+              (cd mathlib && lake exe cache get $files)
               # `cache get` only warns about files it could not fetch, so check that none is left to build.
               if ! (cd mathlib && lake build --no-build $files); then
                 echo "::error::The Mathlib cache of $side ($repo@$ref) is incomplete. Mathlib's CI may not have built it yet."
                 exit 1
               fi
             fi
-            tag="$repo@$ref $(git -C mathlib rev-parse --short=10 HEAD)"
+            tag="$MATHLIB $(git -C mathlib rev-parse --short=10 HEAD)"
             for name in $runnable; do
               if ! METABENCH=metabench ./bench-run.sh mathlib "suites/$name.lean" $BENCH_OPTIONS \
                   -Dbench.out="$OUT/$side/$name.jsonl" -Dbench.tag="$tag" 2>&1 | tee "$OUT/$side/$name.txt"; then
@@ -173,8 +178,8 @@ jobs:
             echo "${side^^}_SHA=$(git -C mathlib rev-parse HEAD)" >> "$GITHUB_ENV"
             echo "${side^^}_LEAN=$(cat mathlib/lean-toolchain)" >> "$GITHUB_ENV"
           }
-          bench base "$BASE_REPO" "$BASE_REF"
-          bench head "$HEAD_REPO" "$HEAD_REF"
+          bench base "$BASE_REPO" "$BASE_REF" "$BASE_MATHLIB"
+          bench head "$HEAD_REPO" "$HEAD_REF" "$HEAD_MATHLIB"
 
       - name: Write the report
         run: |
@@ -187,12 +192,12 @@ jobs:
             if [ -n "$PR" ]; then
               echo "# ${SUITES// /, }: #$PR against its merge base"
             else
-              echo "# ${SUITES// /, }: $BASE_TARGET vs $HEAD_TARGET"
+              echo "# ${SUITES// /, }: $BASE_MATHLIB vs $HEAD_MATHLIB"
             fi
             echo
             echo "| | base | head |"
             echo "|---|---|---|"
-            echo "| Mathlib | $BASE_TARGET | $HEAD_TARGET |"
+            echo "| Mathlib | $BASE_MATHLIB | $HEAD_MATHLIB |"
             echo "| Commit | [\`${BASE_SHA:0:10}\`](https://github.com/$BASE_REPO/commit/$BASE_SHA)" \
               "| [\`${HEAD_SHA:0:10}\`](https://github.com/$HEAD_REPO/commit/$HEAD_SHA) |"
             echo "| Lean | $BASE_LEAN | $HEAD_LEAN |"
